@@ -24,8 +24,7 @@ GO
 CREATE TABLE datosPaciente.Domicilio	-- Listo los SP con 1 duda
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	calle VARCHAR(15) NOT NULL,
-	numero INT NOT NULL,
+	calleYNro VARCHAR(50) NOT NULL,
 	piso INT NULL,
 	departamento VARCHAR(10) NULL, 
 	codigoPostal VARCHAR(10) NOT NULL,
