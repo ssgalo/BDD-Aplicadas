@@ -93,12 +93,14 @@ CREATE TABLE datosPaciente.Paciente
 	idUsuario INT NOT NULL,
 	idEstudio INT NOT NULL,
 	idCobertura INT NOT NULL,
+	idDomicilio INT NOT NULL,
 	idUsuarioActualizacion INT NULL,
 	fechaBorrado DATETIME NULL,
 	CONSTRAINT PK_Paciente PRIMARY KEY (nroDocumento),
 	CONSTRAINT FK_Usuario FOREIGN KEY (idUsuario) REFERENCES datosPaciente.Usuario(id),
 	CONSTRAINT FK_Estudio FOREIGN KEY (idEstudio) REFERENCES datosPaciente.Estudio(id),
-	CONSTRAINT FK_Cobertura FOREIGN KEY (idCobertura) REFERENCES datosPaciente.Cobertura(id)
+	CONSTRAINT FK_Cobertura FOREIGN KEY (idCobertura) REFERENCES datosPaciente.Cobertura(id),
+	CONSTRAINT FK_Domicilio FOREIGN KEY (idDomicilio) REFERENCES datosPaciente.Domicilio(id)
 )
 GO
 
@@ -634,13 +636,13 @@ BEGIN
 
     IF @NuevoNombreSede IS NULL OR LEN(@NuevoNombreSede) = 0
     BEGIN
-        RAISERROR('El nuevo nombre de la sede no puede ser nulo o vacío.');
+        RAISERROR('El nuevo nombre de la sede no puede ser nulo o vacío.', 16, 1);
         RETURN;
     END
 
     IF @NuevaDireccionSede IS NULL OR LEN(@NuevaDireccionSede) = 0
     BEGIN
-        RAISERROR('La nueva dirección de la sede no puede ser nula o vacía.');
+        RAISERROR('La nueva dirección de la sede no puede ser nula o vacía.', 16, 1);
         RETURN;
     END
 
