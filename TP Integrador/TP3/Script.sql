@@ -24,21 +24,21 @@ GO
 CREATE TABLE datosPaciente.Domicilio	-- Listo los SP con 1 duda
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	calleYNro VARCHAR(50) NOT NULL,
+	calleYNro NVARCHAR(50) NOT NULL,
 	piso INT NULL,
-	departamento VARCHAR(10) NULL, 
-	codigoPostal VARCHAR(10) NULL,
-	pais VARCHAR(15) NOT NULL,
-	provincia VARCHAR(15) NOT NULL,
-	localidad VARCHAR(15) NOT NULL
+	departamento NVARCHAR(10) NULL, 
+	codigoPostal NVARCHAR(10) NULL,
+	pais NVARCHAR(15) NOT NULL,
+	provincia NVARCHAR(15) NOT NULL,
+	localidad NVARCHAR(15) NOT NULL
 )
 go
 
 CREATE TABLE datosPaciente.Prestador	-- Listo los SP
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	nombre VARCHAR(20) NOT NULL,
-	tipoPlan VARCHAR(10) NOT NULL,
+	nombre NVARCHAR(20) NOT NULL,
+	tipoPlan NVARCHAR(10) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
@@ -46,7 +46,7 @@ GO
 CREATE TABLE datosPaciente.Cobertura	-- Listo los SP
 (
 	id INT IDENTITY(1,1) PRIMARY KEY not null,
-	imagenCredencial VARCHAR(40) NOT NULL,
+	imagenCredencial NVARCHAR(40) NOT NULL,
 	nroSocio INT NOT NULL,
 	fechaRegistro DATETIME NOT NULL,
 	idPrestador INT NOT NULL,
@@ -59,10 +59,10 @@ CREATE TABLE datosPaciente.Estudio
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	fecha DATE NOT NULL,
-	nombre VARCHAR(15) NOT NULL,
+	nombre NVARCHAR(15) NOT NULL,
 	autorizado BIT NOT NULL,
-	linkDocumentoResultado VARCHAR(50) NOT NULL,
-	imagenResultado VARCHAR(40) NOT NULL,
+	linkDocumentoResultado NVARCHAR(50) NOT NULL,
+	imagenResultado NVARCHAR(40) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
@@ -70,15 +70,15 @@ GO
 CREATE TABLE datosPaciente.Paciente 
 (
 	idHistoriaClinica INT IDENTITY(1,1) NOT NULL,
-	nombre VARCHAR(20) NOT NULL,
-	apellido VARCHAR(20) NOT NULL,
-	apellidoMaterno VARCHAR(20) NOT NULL,
+	nombre NVARCHAR(20) NOT NULL,
+	apellido NVARCHAR(20) NOT NULL,
+	apellidoMaterno NVARCHAR(20) NOT NULL,
 	fechaNacimiento DATE NOT NULL,
 	tipoDocumento VARCHAR(9) NOT NULL,
 	nroDocumento INT NOT NULL,
 	sexo CHAR(9) NOT NULL,
 	genero CHAR(6) NULL,
-	nacionalidad VARCHAR(15) NOT NULL,
+	nacionalidad NVARCHAR(15) NOT NULL,
 	fotoPerfil VARCHAR(40) NOT NULL,
 	mail VARCHAR(60) NOT NULL,
 	telefonoFijo VARCHAR(20) NOT NULL,
@@ -126,8 +126,8 @@ GO
 CREATE TABLE datosAtencion.SedeAtencion
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	nombre VARCHAR(20) NOT NULL,
-	direccion VARCHAR(20) NOT NULL,
+	nombre NVARCHAR(20) NOT NULL,
+	direccion NVARCHAR(20) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
@@ -135,8 +135,8 @@ GO
 CREATE TABLE datosAtencion.Medico
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	nombre VARCHAR(20) NOT NULL,
-	apellido VARCHAR(20) NOT NULL,
+	nombre NVARCHAR(20) NOT NULL,
+	apellido NVARCHAR(20) NOT NULL,
 	nroMatricula INT NOT NULL,
 	idEspecialidad INT NOT NULL,
 	fechaBorrado DATETIME NULL,
@@ -148,7 +148,7 @@ CREATE TABLE datosAtencion.DiasXSede
 (
 	idSede INT,
 	idMedico INT,
-	diaSemana VARCHAR(10),
+	diaSemana NVARCHAR(10),
 	horaInicio TIME,
 	horaFin TIME,
 	CONSTRAINT PK_DiasXSede PRIMARY KEY (idSede, idMedico, diaSemana),
