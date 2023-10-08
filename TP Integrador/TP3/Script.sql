@@ -27,7 +27,7 @@ CREATE TABLE datosPaciente.Domicilio	-- Listo los SP con 1 duda
 	calleYNro VARCHAR(50) NOT NULL,
 	piso INT NULL,
 	departamento VARCHAR(10) NULL, 
-	codigoPostal VARCHAR(10) NOT NULL,
+	codigoPostal VARCHAR(10) NULL,
 	pais VARCHAR(15) NOT NULL,
 	provincia VARCHAR(15) NOT NULL,
 	localidad VARCHAR(15) NOT NULL
