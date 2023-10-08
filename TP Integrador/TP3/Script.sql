@@ -51,7 +51,7 @@ CREATE TABLE datosPaciente.Cobertura	-- Listo los SP
 	nroSocio INT NOT NULL,
 	fechaRegistro DATETIME NOT NULL,
 	idPrestador INT NOT NULL,
-	fechaBorrado DATETIME NOT NULL,
+	fechaBorrado DATETIME NULL,
 	CONSTRAINT FK_Prestador FOREIGN KEY (idPrestador) REFERENCES datosPaciente.Prestador(id)
 )
 GO
