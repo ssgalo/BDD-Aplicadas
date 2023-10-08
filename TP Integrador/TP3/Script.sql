@@ -30,7 +30,8 @@ CREATE TABLE datosPaciente.Domicilio	-- Listo los SP con 1 duda
 	codigoPostal NVARCHAR(10) NULL,
 	pais NVARCHAR(15) NOT NULL,
 	provincia NVARCHAR(15) NOT NULL,
-	localidad NVARCHAR(15) NOT NULL
+	localidad NVARCHAR(15) NOT NULL,
+	nroDocumento INT NOT NULL
 )
 go
 
