@@ -1,3 +1,4 @@
+---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
 CREATE DATABASE ClinicaCureSA
 GO
 
@@ -11,8 +12,10 @@ GO
 CREATE SCHEMA datosAtencion
 
 GO
+---- FIN CREACION DE BASE DE DATOS Y ESQUEMAS ----
 
-CREATE TABLE datosPaciente.Usuario		-- Listo los SP
+---- COMIENZO CREACION DE TABLAS ----
+CREATE TABLE datosPaciente.Usuario
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	contraseña CHAR(8) NOT NULL,
@@ -21,7 +24,7 @@ CREATE TABLE datosPaciente.Usuario		-- Listo los SP
 ) 
 GO
 
-CREATE TABLE datosPaciente.Domicilio	-- Listo los SP con 1 duda
+CREATE TABLE datosPaciente.Domicilio
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	calleYNro NVARCHAR(50) NOT NULL,
@@ -34,7 +37,7 @@ CREATE TABLE datosPaciente.Domicilio	-- Listo los SP con 1 duda
 )
 go
 
-CREATE TABLE datosPaciente.Prestador	-- Listo los SP
+CREATE TABLE datosPaciente.Prestador
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	nombre NVARCHAR(20) NOT NULL,
@@ -43,9 +46,9 @@ CREATE TABLE datosPaciente.Prestador	-- Listo los SP
 )
 GO
 
-CREATE TABLE datosPaciente.Cobertura	-- Listo los SP
+CREATE TABLE datosPaciente.Cobertura
 (
-	id INT IDENTITY(1,1) PRIMARY KEY not null,
+	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	imagenCredencial NVARCHAR(40) NOT NULL,
 	nroSocio INT NOT NULL,
 	fechaRegistro DATETIME NOT NULL,
@@ -91,7 +94,7 @@ CREATE TABLE datosPaciente.Paciente
 	idEstudio INT NOT NULL,
 	idCobertura INT NOT NULL,
 	idUsuarioActualizacion INT NULL,
-	fechaBorrado DATETIME NULL
+	fechaBorrado DATETIME NULL,
 	CONSTRAINT PK_Paciente PRIMARY KEY (nroDocumento),
 	CONSTRAINT FK_Usuario FOREIGN KEY (idUsuario) REFERENCES datosPaciente.Usuario(id),
 	CONSTRAINT FK_Domicilio FOREIGN KEY (idDomicilio) REFERENCES datosPaciente.Domicilio(id),
@@ -146,11 +149,11 @@ GO
 
 CREATE TABLE datosAtencion.DiasXSede
 (
-	idSede INT,
-	idMedico INT,
-	diaSemana NVARCHAR(10),
-	horaInicio TIME,
-	horaFin TIME,
+	idSede INT NOT NULL,
+	idMedico INT NOT NULL,
+	diaSemana NVARCHAR(10) NOT NULL,
+	horaInicio TIME NOT NULL,
+	horaFin TIME NOT NULL,
 	CONSTRAINT PK_DiasXSede PRIMARY KEY (idSede, idMedico, diaSemana),
 	CONSTRAINT FK_Sede FOREIGN KEY (idSede) REFERENCES datosAtencion.SedeAtencion(id),
 	CONSTRAINT FK_Medico FOREIGN KEY (idMedico) REFERENCES datosAtencion.Medico(id)
@@ -175,67 +178,64 @@ CREATE TABLE datosReserva.Reserva
 	CONSTRAINT FK_Paciente FOREIGN KEY (idPaciente) REFERENCES datosPaciente.Paciente(nroDocumento)
 )
 GO
+---- FIN CREACION DE TABLAS ----
 
-
-CREATE OR ALTER PROCEDURE datosPaciente.InsertarUsuario
+---- COMIENZO DE STORED PROCEDURES DE USUARIO ----
+CREATE PROCEDURE datosPaciente.InsertarUsuario
 	@contraseña CHAR(8)
 AS
 BEGIN
-	-- Verificar que los parámetros no sean nulos o vacíos
 	IF (@contraseña is null or @contraseña = ' ') 
 	BEGIN
 		RAISERROR('Los parametros no pueden ser nulos o vacíos.', 16, 1);
 		RETURN;
 	END
 
-	-- Verificar que la contraseña esté entre 4 y 8 caracteres
-	IF LEN(@contraseña) < 4 OR LEN(@contraseña) > 8 
+	IF (LEN(@contraseña) < 4 OR LEN(@contraseña) > 8 )
 	BEGIN
 		RAISERROR('La contraseña debe tener entre 4 y 8 caracteres.', 16, 1);
 		RETURN;
 	END
 
-	DECLARE @fechaCreacion DATETIME = GETDATE();
-
-	-- Insertar el nuevo usuario en la tabla
 	INSERT INTO datosPaciente.Usuario (contraseña, fechaCreacion, fechaBorrado)
-	VALUES (@contraseña,@fechaCreacion , NULL);
+	VALUES (@contraseña,GETDATE() , NULL);
 
-	PRINT 'Usuario insertado correctamente';
+	IF(@@ERROR = 0)
+		PRINT 'Usuario insertado correctamente';
+	ELSE
+		PRINT 'Ocurrió un error al insertar un registro en Usuario'
 END
 GO
 
---EXEC salud.InserUsu ' '';
-
-CREATE OR ALTER PROCEDURE datosPaciente.ModificarUsuario
+CREATE PROCEDURE datosPaciente.ModificarUsuario
+(
 	@id INT,
 	@nuevaContraseña CHAR(8)
+)
 AS
 BEGIN
-	-- Verificar que el usuario con dicho ID exista
-	IF not exists (select 1 from datosPaciente.Usuario where id=@id)
+	IF NOT EXISTS (SELECT 1 FROM datosPaciente.Usuario WHERE id=@id)
 	BEGIN
-		PRINT 'El usuario con ID ' + CAST(@id AS VARCHAR) + ' no existe';
+		PRINT 'El usuario con ID ' + CAST(@id AS VARCHAR) + ' no existe'
 		RETURN;
 	END
 
-	--Actualizar contraseña y fecha de creacion del usuario
 	UPDATE datosPaciente.Usuario
 	SET contraseña = @nuevaContraseña
 	WHERE id = @id
 
-	PRINT 'El usuario con ID ' + cast(@id AS VARCHAR) + ' ha sido modificado correctamente';
+	IF(@@ERROR = 0)
+		PRINT 'El usuario con ID ' + cast(@id AS VARCHAR) + ' ha sido modificado correctamente'
+	ELSE
+		PRINT 'Ocurrió un error al modificar usuario con ID ' + cast(@id AS VARCHAR)
 END
 GO
 
---EXEC salud.ModifUsu 1, 'nueva123', '2023-10-05'; -- No se si esta fecha le pasa como parametro o si nosotros cargamos con la fecha actual
-
-CREATE OR ALTER PROCEDURE datosPaciente.EliminarUsuario
+CREATE PROCEDURE datosPaciente.EliminarUsuario
 	@id INT
 AS
 BEGIN
-	-- Verificar que el usuario con dicho ID exista
-	IF not exists (select 1 from datosPaciente.Usuario where id=@id)
+	IF NOT EXISTS (SELECT 1 FROM datosPaciente.Usuario WHERE id=@id)
 	BEGIN
 		PRINT 'El usuario con ID ' + CAST(@id AS VARCHAR) + ' no existe';
 		RETURN;
@@ -243,73 +243,71 @@ BEGIN
 
 	DECLARE @fechaBorrado DATETIME = GETDATE()
 
-	-- Borrado logico de Usuario
 	UPDATE datosPaciente.Usuario
 	SET fechaBorrado = @fechaBorrado
 	WHERE id = @id
 
-	PRINT 'El usuario con ID ' + cast(@id AS VARCHAR) + ' ha sido borrado correctamente';
+	IF(@@ERROR = 0)
+		PRINT 'El usuario con ID ' + cast(@id AS VARCHAR) + ' ha sido borrado correctamente';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar usuario con ID ' + cast(@id AS VARCHAR)
 END
 GO
---EXEC salud.ElimiUsu 1;
+---- FIN DE STORED PROCEDURES DE USUARIO ----
 
-
-CREATE OR ALTER PROCEDURE datosPaciente.InsertarDomicilio
-	@calle varchar(15),
-	@numero int,
-	@piso int,
-	@departamento varchar(10), 
-	@codigoPostal varchar(10),
-	@pais varchar(15),
-	@provincia varchar(15),
-	@localidad varchar(15)
+---- COMIENZO DE STORED PROCEDURES DE DOMICILIO ----
+CREATE PROCEDURE datosPaciente.InsertarDomicilio
+(
+	@calleYNro NVARCHAR(15),
+	@piso INT,
+	@departamento VARCHAR(10), 
+	@codigoPostal VARCHAR(10),
+	@pais VARCHAR(15),
+	@provincia VARCHAR(15),
+	@localidad VARCHAR(15)
+)
 AS
 BEGIN
-	-- Verificar que los parámetros no sean nulos o vacíos
-	IF (@calle is null or @calle = ' ' or @numero is null
-		or @piso is null or @departamento is null or @departamento = ' '
-		or @codigoPostal is null or @codigoPostal = ' ' or @pais is null
-		or @pais = ' ' or @provincia is null or @provincia = ' '
-		or @localidad is null or @localidad = ' ') 
+	IF (@calleYNro is null or @calleYNro = ' '
+	 or @piso is null or @departamento is null or @departamento = ' '
+	 or @codigoPostal is null or @codigoPostal = ' ' or @pais is null
+	 or @pais = ' ' or @provincia is null or @provincia = ' '
+	 or @localidad is null or @localidad = ' ') 
 	BEGIN
 		RAISERROR('Los parametros no pueden ser nulos o vacíos.', 16, 1);
 		RETURN;
 	END
 
-	-- Insertar el nuevo domicilio en la tabla
-	INSERT INTO datosPaciente.Domicilio (calle, numero, piso, departamento, codigoPostal, pais, provincia, localidad)
-	VALUES (@calle, @numero, @piso, @departamento, @codigoPostal, @pais, @provincia, @localidad);
+	INSERT INTO datosPaciente.Domicilio (calleYNro, piso, departamento, codigoPostal, pais, provincia, localidad)
+	VALUES (@calleYNro, @piso, @departamento, @codigoPostal, @pais, @provincia, @localidad);
 
-	PRINT 'Domicilio insertado correctamente';
-
+	IF (@@ERROR = 0)
+		PRINT 'Domicilio insertado correctamente';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar el registro en Domicilio'
 END
 GO
---EXEC salud.InserDomi 'Calle1',123,2,'Dpto A','12345','Arg','Bs As','Ituzaingo';
 
-CREATE OR ALTER PROCEDURE datosPaciente.ModificarDomi
-    @id int,
-	@nuevaCalle varchar(15) = NULL,
-	@nuevoNumero int = NULL,
-	@nuevoPiso int = NULL,
-	@nuevoDepartamento varchar(10) = NULL, 
-	@nuevoCodigoPostal varchar(10) = NULL,
-	@nuevoPais varchar(15) = NULL,
-	@nuevaProvincia varchar(15) = NULL,
-	@nuevaLocalidad varchar(15) = NULL
+CREATE PROCEDURE datosPaciente.ModificarDomi
+    @id INT,
+	@nuevaCalleYNro NVARCHAR(15) = NULL,
+	@nuevoPiso INT = NULL,
+	@nuevoDepartamento VARCHAR(10) = NULL, 
+	@nuevoCodigoPostal VARCHAR(10) = NULL,
+	@nuevoPais VARCHAR(15) = NULL,
+	@nuevaProvincia VARCHAR(15) = NULL,
+	@nuevaLocalidad VARCHAR(15) = NULL
 AS
 BEGIN
-    -- Verificar que el domicilio con dicho ID  existe
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Domicilio WHERE id = @id)
     BEGIN
         PRINT 'El domicilio con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-    -- Actualizar los datos
     UPDATE datosPaciente.Domicilio
     SET 
-		calle = ISNULL(@nuevaCalle, calle),
-        numero = ISNULL(@nuevoNumero, numero),
+		calleYNro = ISNULL(@nuevaCalleYNro, calleYNro),
         piso = ISNULL(@nuevoPiso, piso),
         departamento = ISNULL(@nuevoDepartamento, departamento),
         codigoPostal = ISNULL(@nuevoCodigoPostal,codigoPostal),
@@ -318,78 +316,89 @@ BEGIN
         localidad = ISNULL(@nuevaLocalidad, localidad)
     WHERE id = @id;
 
-    -- Confirmar la modificación
-    PRINT 'Domicilio con ID ' + CAST(@id AS VARCHAR) + ' modificados correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Domicilio con ID ' + CAST(@id AS VARCHAR) + ' modificados correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al modificar Domicilio con ID ' + cast(@id AS VARCHAR)
 END;
 GO
--- EXEC salud.ModifDomi 1, 'Olivera', 111
 
-
-CREATE OR ALTER PROCEDURE datosPaciente.EliminarDomicilio
-	@id int
+CREATE PROCEDURE datosPaciente.EliminarDomicilio
+	@id INT
 AS
 BEGIN
-    -- Verificar que el domicilio con dicho ID  existe
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Domicilio WHERE id = @id)
     BEGIN
         PRINT 'El domicilio con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-	-- Eliminar domicilio
 	DELETE FROM datosPaciente.Domicilio WHERE id=@id;
 
-	print 'El domicilio con ID ' + cast(@id as VARCHAR) + ' ha sido eliminado correctamente';
+	IF(@@ERROR = 0)
+		PRINT 'El domicilio con ID ' + cast(@id as VARCHAR) + ' ha sido eliminado correctamente';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar Domicilio con ID ' + cast(@id AS VARCHAR)	
 END
-
--- EXEC salud.ElimiDomi 1;
 GO
+---- FIN DE STORED PROCEDURES DE DOMICILIO ----
 
+---- COMIENZO DE STORED PROCEDURES DE PRESTADOR ----
 CREATE PROCEDURE datosPaciente.InsertarPrestador
+(
     @nombre VARCHAR(20),
     @tipoPlan VARCHAR(10)
+)
 AS
 BEGIN
-    -- Insertar el nuevo prestador en la tabla
+	IF (@nombre IS NULL or @nombre = ''
+	 OR @tipoPlan IS NULL or @tipoPlan = '') 
+	BEGIN
+		RAISERROR('Los parametros no pueden ser nulos o vacíos.', 16, 1);
+		RETURN;
+	END
+
     INSERT INTO datosPaciente.Prestador (nombre, tipoPlan)
     VALUES (@nombre, @tipoPlan);
 
-    PRINT 'Prestador cargado correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Prestador cargado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar Prestador';
 END;
 GO
 
--- EXEC salud.InserPrestador'Maria', @tipoPlan = 'Plan B';
-
-CREATE OR ALTER PROCEDURE datosPaciente.ModificarPrestador
+CREATE PROCEDURE datosPaciente.ModificarPrestador
+(
     @id INT,
     @nuevoNombre VARCHAR(20) = NULL,
     @nuevoTipoPlan VARCHAR(10) = NULL
+)
 AS
 BEGIN
-    -- Verificar que el prestador con dicho ID  existe
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Prestador WHERE id = @id)
     BEGIN
         PRINT 'El prestador con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-    -- Actualizar el nombre y el tipo de plan del prestador 
     UPDATE datosPaciente.Prestador
     SET
         nombre = ISNULL(@nuevoNombre, nombre),
         tipoPlan = ISNULL(@nuevoTipoPlan, tipoPlan)
     WHERE id = @id;
 
-    PRINT 'Prestador con ID ' + CAST(@id AS VARCHAR) + ' modificado correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Prestador con ID ' + CAST(@id AS VARCHAR) + ' modificado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar Prestador con ID ' + CAST(@id AS VARCHAR)
 END
 GO
--- EXEC salud.ModifPrestador 2, 'Messi';
 
-CREATE OR ALTER PROCEDURE datosPaciente.EliminarPrestador
+CREATE PROCEDURE datosPaciente.EliminarPrestador
     @id INT
 AS
 BEGIN
-    -- Verificar que el prestador con dicho ID  existe
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Prestador WHERE id = @id)
     BEGIN
         PRINT 'El prestador con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
@@ -398,63 +407,67 @@ BEGIN
 
 	DECLARE @fechaBorrado DATETIME = GETDATE()
 
-    -- Borrado logico del prestador
     UPDATE datosPaciente.Prestador
 	SET fechaBorrado = @fechaBorrado
 	WHERE id = @id;
 
-    PRINT 'Prestador con ID ' + CAST(@id AS VARCHAR) + ' eliminado correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Prestador con ID ' + CAST(@id AS VARCHAR) + ' borrado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar borrar el Prestador con ID ' + CAST(@id AS VARCHAR)
 END;
+GO
+---- FIN DE STORED PROCEDURES DE PRESTADOR ----
 
--- EXEC salud.ElimPrestador 2;
-go
-
+---- COMIENZO DE STORED PROCEDURES DE PRESTADOR ----
 CREATE OR ALTER PROCEDURE datosPaciente.InsertarCobertura
+(
     @imagenCredencial VARCHAR(40),
     @nroSocio INT,
     @fechaRegistro DATE,
     @idPrestador INT
+)
 AS
 BEGIN
-    -- Verificar que el prestador con dicho ID existe en la tabla Prestador
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Prestador WHERE id = @idPrestador)
     BEGIN
         PRINT 'El prestador con ID ' + CAST(@idPrestador AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-    -- Insertar el nuevo registro en la tabla Cobertura
     INSERT INTO datosPaciente.Cobertura (imagenCredencial, nroSocio, fechaRegistro, idPrestador)
     VALUES (@imagenCredencial, @nroSocio, @fechaRegistro, @idPrestador);
 
-    PRINT 'Registro de Cobertura insertado correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Registro de Cobertura insertado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar un registro en Cobertura';
 END
 GO
---EXEC salud.InserCobertura 'nombre_imagen',  12345, '2023-10-06', 1;
 
-CREATE OR ALTER PROCEDURE datosPaciente.ModificarCobertura
+CREATE PROCEDURE datosPaciente.ModificarCobertura
+(
     @id INT,
     @nuevaImagenCredencial VARCHAR(40) = NULL,
     @nuevoNroSocio INT = NULL,
     @nuevaFechaRegistro DATE = NULL,
     @nuevoIdPrestador INT = NULL
+)
 AS
 BEGIN
-    -- Verificar que la cobertura con dicho ID existe
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Cobertura WHERE id = @id)
     BEGIN
         PRINT 'La cobertura con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-    -- Verificar que el nuevo prestador con dicho ID existe en la tabla Prestador
-    IF @nuevoIdPrestador IS NOT NULL AND NOT EXISTS (SELECT 1 FROM datosPaciente.Prestador WHERE id = @nuevoIdPrestador)
+    IF (@nuevoIdPrestador IS NOT NULL 
+	AND NOT EXISTS (SELECT 1 FROM datosPaciente.Prestador WHERE id = @nuevoIdPrestador))
     BEGIN
         PRINT 'El nuevo prestador con ID ' + CAST(@nuevoIdPrestador AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-    -- Actualizar los campos 
     UPDATE datosPaciente.Cobertura
     SET
         imagenCredencial = ISNULL(@nuevaImagenCredencial, imagenCredencial),
@@ -463,39 +476,37 @@ BEGIN
         idPrestador = ISNULL(@nuevoIdPrestador, idPrestador)
     WHERE id = @id;
 
-    PRINT 'Cobertura con ID ' + CAST(@id AS VARCHAR) + ' modificada correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Cobertura con ID ' + CAST(@id AS VARCHAR) + ' modificada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar Cobertura con ID ' + CAST(@id AS VARCHAR)
 END;
 GO
--- EXEC salud.ModifCobertura 1, 'nueva'
 
-CREATE OR ALTER PROCEDURE datosPaciente.EliminarCobertura
+CREATE PROCEDURE datosPaciente.EliminarCobertura
     @idPrestador INT
 AS
 BEGIN
-    -- Verificar que el prestador con dicho ID existe en la tabla Prestador
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Prestador WHERE id = @idPrestador)
     BEGIN
         PRINT 'El prestador con ID ' + CAST(@idPrestador AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-   DECLARE @fechaBorrado DATETIME = GETDATE()
-
-    -- Borrado logico de todas las coberturas asociadas al prestador
     UPDATE datosPaciente.Cobertura
-	SET fechaBorrado = @fechaBorrado
+	SET fechaBorrado = GETDATE()
 	WHERE id = @idPrestador;
 
-    PRINT 'Coberturas del prestador con ID ' + CAST(@idPrestador AS VARCHAR) + ' eliminadas correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Coberturas del Prestador con ID ' + CAST(@idPrestador AS VARCHAR) + ' eliminadas correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar Coberturas del Prestador con ID ' + CAST(@idPrestador AS VARCHAR)
 END;
-
--- EXEC salud.ElimCobertura 1
 GO
+---- FIN DE STORED PROCEDURES DE PRESTADOR ----
 
--- select * from salud.Cobertura
--- select * from salud.Prestador
-
-CREATE OR ALTER PROCEDURE datosAtencion.InsertarEspecialidad
+---- COMIENZO DE STORED PROCEDURES DE ESPECIALIDAD ----
+CREATE PROCEDURE datosAtencion.InsertarEspecialidad
 	@nombreEspecialidad varchar(20)
 AS
 BEGIN
@@ -512,100 +523,107 @@ BEGIN
 	END
 
 	INSERT INTO datosAtencion.Especialidad(nombre)
-	VALUES
-	(@nombreEspecialidad)
+	VALUES (@nombreEspecialidad)
 
-	PRINT 'Especialidad ingresada correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Especialidad ingresada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar un registro en Especialidad'
 END
-
---SELECT * FROM datosAtencion.Especialidad
---EXEC datosAtencion.InsertarEspecialidad 'Traumatología'
-
 GO
+
 CREATE PROCEDURE datosAtencion.ModificarEspecialidad
+(
     @idEspecialidad INT,
     @NuevoNombre VARCHAR(20)
+)
 AS
 BEGIN
-    -- Verificar si la especialidad existe
-    IF NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE ID = @idEspecialidad)
+    IF (NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE ID = @idEspecialidad))
     BEGIN
         PRINT 'La especialidad especificada no existe.';
         RETURN; 
     END
 
-    -- Validar que el nuevo nombre no esté vacío
-    IF LEN(@NuevoNombre) = 0
+    IF (LEN(@NuevoNombre) = 0)
     BEGIN
         PRINT 'El nuevo nombre no puede estar vacío.';
         RETURN; 
     END
 
-    -- Verificar si el nuevo nombre ya existe en otra fila
-    IF EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE Nombre = @NuevoNombre AND ID != @idEspecialidad)
+    IF (EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE Nombre = @NuevoNombre AND ID != @idEspecialidad))
     BEGIN
         PRINT 'Ya existe la especialidad por la que queres modificar.';
         RETURN;
     END
 
-    -- Realizar la actualización
     UPDATE datosAtencion.Especialidad
     SET Nombre = @NuevoNombre
     WHERE ID = @idEspecialidad;
 
-    PRINT 'Especialidad actualizada correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Especialidad con ID ' + CAST(@idEspecialidad AS VARCHAR) + ' actualizada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar Especialidad con ID ' + CAST(@idEspecialidad AS VARCHAR)
 END
-
 GO
+
 CREATE PROCEDURE datosAtencion.EliminarEspecialidad
     @idEspecialidad INT
 AS
 BEGIN
-    -- Verificar si la @idEspecialidad existe
     IF NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE ID = @idEspecialidad)
     BEGIN
         PRINT 'La EspecialidadID especificada no existe.';
         RETURN;
     END
 
-    -- Eliminar la especialidad
     DELETE FROM datosAtencion.Especialidad WHERE ID = @idEspecialidad;
 
-    PRINT 'Especialidad eliminada correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Especialidad con ID ' + CAST(@idEspecialidad AS VARCHAR) + ' eliminada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar Especialidad con ID ' + CAST(@idEspecialidad AS VARCHAR) 
 END
-
 GO
-CREATE OR ALTER PROCEDURE datosAtencion.InsertarSede
+---- FIN DE STORED PROCEDURES DE ESPECIALIDAD ----
+
+---- COMIENZO DE STORED PROCEDURES DE SEDE ----
+CREATE PROCEDURE datosAtencion.InsertarSede
+(
 	@nombreSede VARCHAR(20),
 	@direccionSede VARCHAR(20)
+)
 AS
 BEGIN
-	-- Validar que @nombreSede no sea nulo o vacío
     IF @nombreSede IS NULL OR LEN(@nombreSede) = 0
     BEGIN
         RAISERROR('El nombre de la sede no puede ser nulo o vacío.',16, 1);
         RETURN; 
     END
 
-    -- Validar que @direccionSede no sea nulo o vacío
     IF @direccionSede IS NULL OR LEN(@direccionSede) = 0
     BEGIN
         RAISERROR('La dirección de la sede no puede ser nula o vacía.',16,1);
         RETURN; 
     END
-
     
     INSERT INTO datosAtencion.SedeAtencion(nombre, direccion)
     VALUES (@nombreSede, @direccionSede);
 
-    PRINT 'Sede insertada correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Sede insertada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar Sede'
 END
-
 GO
-CREATE OR ALTER PROCEDURE datosAtencion.ModificarSede
+
+CREATE PROCEDURE datosAtencion.ModificarSede
+(
     @SedeID INT,
     @NuevoNombreSede VARCHAR(20),
     @NuevaDireccionSede VARCHAR(20)
+)
 AS
 BEGIN
  
@@ -624,23 +642,27 @@ BEGIN
     IF @NuevaDireccionSede IS NULL OR LEN(@NuevaDireccionSede) = 0
     BEGIN
         RAISERROR('La nueva dirección de la sede no puede ser nula o vacía.');
-        RETURN; -- Salir del procedimiento
+        RETURN;
     END
 
     UPDATE datosAtencion.SedeAtencion
     SET nombre = @NuevoNombreSede, direccion = @NuevaDireccionSede
     WHERE id = @SedeID;
 
-    PRINT 'Sede modificada correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Sede con ID ' + CAST(@SedeID AS VARCHAR) + ' modificada correctamente.'
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar Sede con ID ' + CAST(@SedeID AS VARCHAR)
 END
-
 GO
-CREATE OR ALTER PROCEDURE datosAtencion.EliminarSede
+
+CREATE PROCEDURE datosAtencion.EliminarSede
     @SedeID INT
 AS
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM datosAtencion.SedeAtencion WHERE id = @SedeID)
     BEGIN
+		PRINT 'La SedeID especificada no existe.'
         RETURN;
     END
 
@@ -648,82 +670,89 @@ BEGIN
     SET fechaBorrado = NULL
     WHERE id = @SedeID;
 
-    PRINT 'Sede eliminada correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Sede con ID ' + CAST(@SedeID AS VARCHAR) + ' borrada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar borrar la Sede con ID ' + CAST(@SedeID AS VARCHAR)
 END
-
 GO
-CREATE OR ALTER PROCEDURE datosAtencion.InsertarHorarioMedico
+---- FIN DE STORED PROCEDURES DE SEDE ----
+
+---- COMIENZO DE STORED PROCEDURES DE DIAXSEDE ----
+CREATE PROCEDURE datosAtencion.InsertarHorarioMedico
+(
     @idSede INT,
     @idMedico INT,
     @diaSemana VARCHAR(10),
     @horaInicio TIME,
     @horaFin TIME
+)
 AS
 BEGIN
     -- Validar que la Sede exista
-    IF NOT EXISTS (SELECT 1 FROM datosAtencion.SedeAtencion WHERE id = @idSede)
+    IF (NOT EXISTS (SELECT 1 FROM datosAtencion.SedeAtencion WHERE id = @idSede))
     BEGIN
         RAISERROR('La Sede especificada no existe.',16,1);
         RETURN; 
     END
 
     -- Validar que el Médico exista
-    IF NOT EXISTS (SELECT 1 FROM datosAtencion.Medico WHERE id = @idMedico)
+    IF (NOT EXISTS (SELECT 1 FROM datosAtencion.Medico WHERE id = @idMedico))
     BEGIN
         RAISERROR('El Médico especificado no existe.',16,1);
         RETURN; 
     END
 
-    -- Validar que los campos no sean nulos o vacíos
-    IF @diaSemana IS NULL OR @horaInicio IS NULL OR @horaFin IS NULL
+    IF (@diaSemana IS NULL OR @horaInicio IS NULL OR @horaFin IS NULL)
     BEGIN
         RAISERROR('Los campos no pueden ser nulos.',16,1);
         RETURN; 
     END
 
-    IF LEN(@diaSemana) = 0
+    IF (LEN(@diaSemana) = 0)
     BEGIN
         RAISERROR('El campo "diaSemana" no puede estar vacío.',16,1);
         RETURN;
     END
 
-    -- Insertar el nuevo registro
     INSERT INTO datosAtencion.DiasXSede(idSede, idMedico, diaSemana, horaInicio, horaFin)
     VALUES (@idSede, @idMedico, @diaSemana, @horaInicio, @horaFin);
 
-    PRINT 'Registro de horario de médico insertado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Registro de horario de médico insertado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar registro en DiaXSede.'
 END
-
 GO
-CREATE OR ALTER PROCEDURE datosAtencion.ModificarHorarioMedico
+
+CREATE PROCEDURE datosAtencion.ModificarHorarioMedico
+(
     @idSede INT,
     @idMedico INT,
     @diaSemana VARCHAR(10),
     @nuevaHoraInicio TIME,
     @nuevaHoraFin TIME
+)
 AS
 BEGIN
-    -- Verificar si el registro existe en la tabla
-    IF NOT EXISTS (
+    IF (NOT EXISTS (
         SELECT 1
         FROM datosAtencion.DiasXSede
         WHERE idSede = @idSede
           AND idMedico = @idMedico
           AND diaSemana = @diaSemana
-    )
+    ))
     BEGIN
         RAISERROR('El registro que intenta modificar no existe.',16,1);
         RETURN; 
     END
 
-    -- Validar que los campos no sean nulos o vacíos
-    IF @nuevaHoraInicio IS NULL OR @nuevaHoraFin IS NULL
+    IF (@nuevaHoraInicio IS NULL OR @nuevaHoraFin IS NULL)
     BEGIN
         RAISERROR('Los campos de hora no pueden ser nulos.',16,1);
         RETURN; 
     END
 
-    -- Realizar la actualización del registro
     UPDATE datosAtencion.DiasXSede
     SET horaInicio = @nuevaHoraInicio,
         horaFin = @nuevaHoraFin
@@ -731,64 +760,75 @@ BEGIN
       AND idMedico = @idMedico
       AND diaSemana = @diaSemana;
 
-    PRINT 'Registro de horario de médico modificado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Registro de horario de médico modificado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar el registro de horario médico.';
 END
-
 GO
+
 CREATE OR ALTER PROCEDURE datosAtencion.EliminarHorarioMedico
+(
     @idSede INT,
     @idMedico INT,
     @diaSemana VARCHAR(10)
+)
 AS
 BEGIN
-    -- Verificar si el registro existe en la tabla
-    IF NOT EXISTS (
+    IF (NOT EXISTS (
         SELECT 1
         FROM datosAtencion.DiasXSede
         WHERE idSede = @idSede
           AND idMedico = @idMedico
           AND diaSemana = @diaSemana
-    )
+    ))
     BEGIN
         RAISERROR('El registro que intenta eliminar no existe.',16,1);
         RETURN;
     END
 
-    -- Realizar la eliminación del registro
     DELETE FROM datosAtencion.DiasXSede
     WHERE idSede = @idSede
       AND idMedico = @idMedico
       AND diaSemana = @diaSemana;
 
-    PRINT 'Registro de horario de médico eliminado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Registro de horario de médico eliminado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar registro de horario de médico.'
 END
-
 GO
-CREATE OR ALTER PROCEDURE datosReserva.InsertarTipoTurno
+---- FIN DE STORED PROCEDURES DE DIAXSEDE ----
+
+---- COMIENZO DE STORED PROCEDURES DE TIPOTURNO ----
+CREATE PROCEDURE datosReserva.InsertarTipoTurno
     @nombre VARCHAR(10)
 AS
 BEGIN
     -- Validar que @nombre sea "presencial" o "virtual"
-    IF @nombre NOT IN ('Presencial', 'Virtual')
+    IF (@nombre NOT IN ('Presencial', 'Virtual'))
     BEGIN
         RAISERROR('El nombre del tipo de turno debe ser "presencial" o "virtual".',16,1);
         RETURN; 
     END
 
-    -- Insertar el nuevo tipo de turno
     INSERT INTO datosReserva.TipoTurno (nombre)
     VALUES (@nombre);
 
-    PRINT 'Tipo de turno insertado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Tipo de turno insertado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar registro de Tipo de Turno'
 END
-
 GO
-CREATE OR ALTER PROCEDURE datosReserva.ModificarTipoTurno
+
+CREATE PROCEDURE datosReserva.ModificarTipoTurno
+(
     @id INT,
     @nuevoNombre VARCHAR(10)
+)
 AS
 BEGIN
-    -- Validar que @id exista en la tabla
     IF NOT EXISTS (SELECT 1 FROM datosReserva.TipoTurno WHERE id = @id)
     BEGIN
         RAISERROR('El ID del tipo de turno especificado no existe.',16,1);
@@ -802,35 +842,38 @@ BEGIN
         RETURN; 
     END
 
-    -- Realizar la actualización del nombre del tipo de turno
     UPDATE datosReserva.TipoTurno
     SET nombre = @nuevoNombre
     WHERE id = @id;
 
-    PRINT 'Nombre del tipo de turno modificado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Nombre del Tipo de Turno modificado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar un registro de Tipo de Turno'
 END
 
 GO
-CREATE OR ALTER PROCEDURE datosReserva.EliminarTipoTurno
+CREATE PROCEDURE datosReserva.EliminarTipoTurno
     @id INT
 AS
 BEGIN
-    -- Verificar si el registro existe en la tabla
     IF NOT EXISTS (SELECT 1 FROM datosReserva.TipoTurno WHERE id = @id)
     BEGIN
         RAISERROR('El ID del tipo de turno especificado no existe.',16,1);
         RETURN; 
     END
 
-    -- Realizar la eliminación del registro estableciendo fechaBorrado
     UPDATE datosReserva.TipoTurno
     SET fechaBorrado = GETDATE()
     WHERE id = @id;
 
-    PRINT 'Tipo de turno eliminado correctamente.';
+	IF(@@ERROR = 0)
+		PRINT 'Tipo de turno eliminado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar el registro de Tipo de Turno'
 END
-
 GO
+
 CREATE OR ALTER PROCEDURE datosReserva.InsertarEstadoTurno
     @nombreEstado CHAR(9)
 AS
@@ -897,8 +940,11 @@ BEGIN
     PRINT 'Estado de turno eliminado correctamente.';
 END
 GO
+---- FIN DE STORED PROCEDURES DE TIPOTURNO ----
 
-CREATE OR ALTER PROCEDURE datosPaciente.InserPaciente
+---- COMIENZO DE STORED PROCEDURES DE PACIENTE ----
+CREATE PROCEDURE datosPaciente.InserPaciente
+(
 	@nombre VARCHAR(20),
 	@apellido VARCHAR(20),
 	@apellidoMaterno VARCHAR(20),
@@ -917,10 +963,9 @@ CREATE OR ALTER PROCEDURE datosPaciente.InserPaciente
 	@idUsuario INT,
 	@idDomicilio INT,
 	@idEstudio INT
+)
 AS
 BEGIN
-
-	-- Verificamos parametros nulos/vacios
 	IF( @nombre  = '' OR @nombre IS NULL
 	 OR @apellido = '' OR @apellido IS NULL
 	 OR @apellidoMaterno = '' OR @apellidoMaterno IS NULL
@@ -951,7 +996,6 @@ BEGIN
 		RETURN;
 	END
 
-	-- Inserta el nuevo registro enla tabla Paciente
 	INSERT INTO datosPaciente.Paciente (
 				nombre,			apellido,		apellidoMaterno,	fechaNacimiento,
 				tipoDocumento,	nroDocumento,	sexo,				genero,
@@ -966,12 +1010,16 @@ BEGIN
 				@telefonoContactoAlternativo,	@telefonoLaboral,	@fechaNacimiento,
 				@idUsuario,		@idEstudio
 			)
-
-	PRINT 'Registro de Paciente insertado correctamente.';
+	
+	IF (@@ERROR = 0)
+		PRINT 'Registro de Paciente insertado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar registro en Paciente'
 END
 GO
 
-CREATE OR ALTER PROCEDURE datosPaciente.ModifPaciente
+CREATE PROCEDURE datosPaciente.ModifPaciente
+(
 	@id INT,
 	@nombre VARCHAR(20) = NULL,
 	@apellido VARCHAR(20)  = NULL,
@@ -990,9 +1038,9 @@ CREATE OR ALTER PROCEDURE datosPaciente.ModifPaciente
 	@idUsuarioActualizacion INT = NULL,
 	@idDomicilio INT = NULL,
 	@idEstudio INT = NULL
+)
 AS
 BEGIN	
-	-- Verificar que el paciente con dicho ID existe
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Paciente WHERE idHistoriaClinica = @id)
     BEGIN
         PRINT 'El paciente con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
@@ -1005,8 +1053,6 @@ BEGIN
 		PRINT('Ya existe un paciente registrado con el DNI' + CAST(@nroDocumento AS VARCHAR));
 		RETURN;
 	END
-
-	DECLARE @fechaActualizacion DATETIME = GETDATE()
 
 	UPDATE datosPaciente.Paciente
 	SET		nombre				= ISNULL(@nombre, nombre),
@@ -1023,41 +1069,43 @@ BEGIN
 			telefonoFijo		= ISNULL(@telefonoFijo, telefonoFijo),
 			telefonoContactoAlternativo = ISNULL(@telefonoContactoAlternativo, telefonoContactoAlternativo),
 			telefonoLaboral		= ISNULL(@telefonoLaboral, telefonoLaboral),
-			fechaActualizacion	= @fechaActualizacion,
+			fechaActualizacion	= GETDATE(),
 			idDomicilio			= ISNULL(@idDomicilio, idDomicilio),
 			idEstudio			= ISNULL(@idEstudio, idEstudio),
 			idUsuarioActualizacion = ISNULL(@idUsuarioActualizacion, idUsuarioActualizacion)
 	WHERE	idHistoriaClinica = @id
 
-	-- Confirmar la modificación
-	IF (@@ROWCOUNT > 0)
-	BEGIN
+	IF (@@ERROR = 0)
 		PRINT 'Paciente con ID ' + CAST(@id AS VARCHAR) + ' modificado correctamente.';
-	END
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar Paciente con ID ' + CAST(@id AS VARCHAR)
 END
 GO
 
-CREATE OR ALTER PROCEDURE datosPaciente.ElimPaciente
+CREATE PROCEDURE datosPaciente.ElimPaciente
     @idHistoriaClinica INT
 AS
 BEGIN
-	 -- Verificar que el Paciente con dicho ID existe
     IF NOT EXISTS (SELECT 1 FROM datosPaciente.Paciente WHERE idHistoriaClinica = @idHistoriaClinica)
     BEGIN
         PRINT 'El paciente con ID ' + CAST(@idHistoriaClinica AS VARCHAR) + ' no existe.';
         RETURN;
     END
 
-    -- Borrado logico del Paciente
     UPDATE datosPaciente.Paciente
 	SET fechaBorrado = GETDATE()
 	WHERE idHistoriaClinica = @idHistoriaClinica;
 
-    PRINT 'El Paciente con ID ' + CAST(@idHistoriaClinica AS VARCHAR) + ' fue borrado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'El Paciente con ID ' + CAST(@idHistoriaClinica AS VARCHAR) + ' fue borrado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar Paciente con ID ' + CAST(@idHistoriaClinica AS VARCHAR)
 END
 GO
+---- FIN DE STORED PROCEDURES DE PACIENTE ----
 
-CREATE OR ALTER PROCEDURE datosAtencion.InsertarMedico
+---- COMIENZO DE STORED PROCEDURES DE MEDICO ----
+CREATE PROCEDURE datosAtencion.InsertarMedico
 (
     @nombre VARCHAR(20),
     @apellido VARCHAR(20),
@@ -1066,12 +1114,11 @@ CREATE OR ALTER PROCEDURE datosAtencion.InsertarMedico
 )
 AS
 BEGIN
-    IF (
-		@nombre IS NULL OR @nombre = ''
+    IF (@nombre IS NULL OR @nombre = ''
 	 OR	@apellido IS NULL OR @apellido = ''
 	 OR	@nroMatricula IS NULL
 	 OR	@idEspecialidad IS NULL
-	   )
+	)
     BEGIN
         RAISERROR('Los parametros no pueden ser nulos o vacíos.', 16, 1);
         RETURN;
@@ -1080,11 +1127,14 @@ BEGIN
     INSERT INTO datosAtencion.Medico (nombre, apellido, nroMatricula, idEspecialidad)
     VALUES (@nombre, @apellido, @nroMatricula, @idEspecialidad);
 
-	PRINT 'Registro de Medico insertado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Registro de Medico insertado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar un registro en Medico.'
 END;
 GO
 
-CREATE OR ALTER PROCEDURE datosAtencion.ModifMedico
+CREATE PROCEDURE datosAtencion.ModifMedico
 (
     @id INT,
     @nombre VARCHAR(20),
@@ -1094,7 +1144,6 @@ CREATE OR ALTER PROCEDURE datosAtencion.ModifMedico
 )
 AS
 BEGIN
-
 	IF(NOT EXISTS (SELECT 1 FROM datosAtencion.Medico WHERE id = @id))
 	BEGIN
 		PRINT 'El Medico con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
@@ -1108,18 +1157,17 @@ BEGIN
         idEspecialidad = ISNULL(@idEspecialidad, idEspecialidad)
     WHERE id = @id;
 
-	IF (@@ROWCOUNT > 0)
-	BEGIN
+	IF (@@ERROR = 0)
 		PRINT 'El Medico con ID ' + CAST(@id AS VARCHAR) + ' fue modificado correctamente.';
-	END
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar un Medico con ID ' + CAST(@id AS VARCHAR)
 END;
 GO
 
-CREATE OR ALTER PROCEDURE datosAtencion.EliminarMedico
+CREATE PROCEDURE datosAtencion.EliminarMedico
     @id INT
 AS
 BEGIN
-	 -- Verificar que el Paciente con dicho ID existe
     IF NOT EXISTS (SELECT 1 FROM datosAtencion.Medico WHERE id = @id)
     BEGIN
         PRINT 'El Medico con ID ' + CAST(@id AS VARCHAR) + ' no existe.';
@@ -1130,11 +1178,16 @@ BEGIN
     SET fechaBorrado = GETDATE()
     WHERE id = @id;
 
-    PRINT 'El Medico con ID ' + CAST(@id AS VARCHAR) + ' fue borrado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'El Medico con ID ' + CAST(@id AS VARCHAR) + ' fue borrado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar un Medico con ID ' + CAST(@id AS VARCHAR)
 END;
 GO
+---- FIN DE STORED PROCEDURES DE MEDICO ----
 
-CREATE OR ALTER PROCEDURE datosReserva.InsertarReserva
+---- COMIENZO DE STORED PROCEDURES DE RESERVA ----
+CREATE PROCEDURE datosReserva.InsertarReserva
 (
     @fecha DATE,
     @hora TIME,
@@ -1147,8 +1200,7 @@ CREATE OR ALTER PROCEDURE datosReserva.InsertarReserva
 )
 AS
 BEGIN
-    IF(
-		@fecha IS NULL
+    IF( @fecha IS NULL
 	 OR	@hora IS NULL
 	 OR	@idMedico IS NULL
 	 OR	@idEspecialidad IS NULL
@@ -1156,7 +1208,7 @@ BEGIN
 	 OR	@idEstadoTurno IS NULL
 	 OR	@idTipoTurno IS NULL
 	 OR	@idPaciente IS NULL
-	   )
+	)
     BEGIN
         RAISERROR('Los parametros no pueden ser nulos o vacíos.', 16, 1);
         RETURN;
@@ -1169,13 +1221,16 @@ BEGIN
     VALUES (
 			@fecha,			@hora,			@idMedico,		@idEspecialidad, @idDireccionAtencion,
 			@idEstadoTurno, @idTipoTurno,	@idPaciente
-		  )
+		   )
 
-	PRINT 'Registro de Reserva insertado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Registro de Reserva insertado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar un registro en Reserva.'
 END;
 GO
 
-CREATE OR ALTER PROCEDURE datosReserva.ModificarReserva
+CREATE PROCEDURE datosReserva.ModificarReserva
 (
     @id INT,
     @fecha DATE = NULL,
@@ -1206,14 +1261,14 @@ BEGIN
         idPaciente = ISNULL(@idPaciente, idPaciente)
     WHERE id = @id;
 
-	IF (@@ROWCOUNT > 0)
-	BEGIN
+	IF (@@ERROR = 0)
 		PRINT 'La Reserva con ID ' + CAST(@id AS VARCHAR) + ' fue modificada correctamente.';
-	END
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar Reserva con ID ' + CAST(@id AS VARCHAR)
 END;
 GO
 
-CREATE OR ALTER PROCEDURE datosReserva.EliminarReserva
+CREATE PROCEDURE datosReserva.EliminarReserva
     @id INT
 AS
 BEGIN
@@ -1226,11 +1281,16 @@ BEGIN
     DELETE FROM datosReserva.Reserva
     WHERE id = @id;
 
-	PRINT 'La Reserva con ID ' + CAST(@id AS VARCHAR) + ' fue borrada correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'La Reserva con ID ' + CAST(@id AS VARCHAR) + ' fue eliminada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar Reserva con ID ' + CAST(@id AS VARCHAR)
 END;
 GO
+---- FIN DE STORED PROCEDURES DE RESERVA ----
 
-CREATE OR ALTER PROCEDURE datosPaciente.InsertarEstudio
+---- COMIENZO DE STORED PROCEDURES DE ESTUDIO ----
+CREATE PROCEDURE datosPaciente.InsertarEstudio
 (
     @fecha DATE,
     @nombre VARCHAR(15),
@@ -1259,11 +1319,14 @@ BEGIN
 			@fecha, @nombre,	@autorizado,	@linkDocumentoResultado,	@imagenResultado
 			)
 
-	PRINT 'Registro de Estudio insertado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'Registro de Estudio insertado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar insertar registro en Estudio.'
 END;
 GO
 
-CREATE OR ALTER PROCEDURE datosPaciente.ModificarEstudio
+CREATE PROCEDURE datosPaciente.ModificarEstudio
 (
     @id INT,
     @fecha DATE = NULL,
@@ -1288,11 +1351,14 @@ BEGIN
         imagenResultado = @imagenResultado
     WHERE id = @id;
 
-	PRINT 'El Estudio con ID ' + CAST(@id AS VARCHAR) + ' fue modificada correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'El Estudio con ID ' + CAST(@id AS VARCHAR) + ' fue modificada correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar modificar Estudio con ID ' + CAST(@id AS VARCHAR)
 END;
 GO
 
-CREATE OR ALTER PROCEDURE salud.EliminarEstudio
+CREATE OR ALTER PROCEDURE datosPaciente.EliminarEstudio
     @id INT
 AS
 BEGIN
@@ -1306,5 +1372,9 @@ BEGIN
     SET fechaBorrado = GETDATE()
     WHERE id = @id;
 
-	PRINT 'El Estudio con ID ' + CAST(@id AS VARCHAR) + ' fue borrado correctamente.';
+	IF (@@ERROR = 0)
+		PRINT 'El Estudio con ID ' + CAST(@id AS VARCHAR) + ' fue borrado correctamente.';
+	ELSE
+		PRINT 'Ocurrió un error al intentar eliminar Estudio con ID ' + CAST(@id AS VARCHAR)
 END;
+---- FIN DE STORED PROCEDURES DE ESTUDIO ----
