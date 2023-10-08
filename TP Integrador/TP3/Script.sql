@@ -88,14 +88,12 @@ CREATE TABLE datosPaciente.Paciente
 	fechaRegistro DATE NOT NULL,
 	fechaActualizacion DATETIME NULL,
 	idUsuario INT NOT NULL,
-	idDomicilio INT NOT NULL,
 	idEstudio INT NOT NULL,
 	idCobertura INT NOT NULL,
 	idUsuarioActualizacion INT NULL,
 	fechaBorrado DATETIME NULL
 	CONSTRAINT PK_Paciente PRIMARY KEY (nroDocumento),
 	CONSTRAINT FK_Usuario FOREIGN KEY (idUsuario) REFERENCES datosPaciente.Usuario(id),
-	CONSTRAINT FK_Domicilio FOREIGN KEY (idDomicilio) REFERENCES datosPaciente.Domicilio(id),
 	CONSTRAINT FK_Estudio FOREIGN KEY (idEstudio) REFERENCES datosPaciente.Estudio(id),
 	CONSTRAINT FK_Cobertura FOREIGN KEY (idCobertura) REFERENCES datosPaciente.Cobertura(id)
 )
