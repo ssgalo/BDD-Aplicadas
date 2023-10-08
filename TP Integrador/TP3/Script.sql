@@ -73,7 +73,7 @@ CREATE TABLE datosPaciente.Paciente
 	nombre NVARCHAR(20) NOT NULL,
 	apellido NVARCHAR(20) NOT NULL,
 	apellidoMaterno NVARCHAR(20) NOT NULL,
-	fechaNacimiento DATE NOT NULL,
+	fechaNacimiento VARCHAR(10) NOT NULL,
 	tipoDocumento VARCHAR(9) NOT NULL,
 	nroDocumento INT NOT NULL,
 	sexo CHAR(9) NOT NULL,
