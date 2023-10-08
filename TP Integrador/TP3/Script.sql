@@ -17,7 +17,7 @@ CREATE TABLE datosPaciente.Usuario		-- Listo los SP
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	contraseña CHAR(8) NOT NULL,
 	fechaCreacion DATETIME NOT NULL,
-	fechaBorrado DATETIME NOT NULL
+	fechaBorrado DATETIME NULL
 ) 
 GO
 
