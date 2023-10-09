@@ -79,3 +79,35 @@ WITH(
 go
 
 select * from Centro_Autorizaciones
+
+
+	
+-- Estructura del XML
+	
+CREATE OR ALTER PROCEDURE GenerarInformeTurnos(
+    @NombreObraSocial NVARCHAR(30)
+    @FechaInicio DATE,
+    @FechaFin DATE
+)
+AS
+BEGIN
+    SELECT
+        P.Apellido AS 'ApellidoPaciente',
+        P.Nombre AS 'NombrePaciente',
+        P.DNI AS 'DNIPaciente',
+        M.Nombre AS 'NombreProfesional',
+        M.Matricula AS 'MatriculaProfesional',
+        R.Fecha,
+        R.Hora,
+        R.Especialidad
+    FROM --salud.Reserva R INNER JOIN 
+    WHERE R.Fecha BETWEEN @FechaInicio AND @FechaFin
+    AND 
+	--R.ObraSocial = @NombreObraSocial
+    FOR XML AUTO, ROOT('InformeTurnos');
+END
+
+
+EXEC GenerarInformeTurnos 'OSDE', '2023-01-01', '2023-12-31';
+
+--Esto devuelve toda 1 fila con los datos en formato xml, si los clickeas te abre una pestaña nueva y ahi se pueden guardar
