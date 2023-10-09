@@ -11,7 +11,7 @@ GO
 CREATE TABLE datosPaciente.Usuario		-- Listo los SP
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	contraseÒa CHAR(8) NOT NULL,
+	contrase√±a CHAR(8) NOT NULL,
 	fechaCreacion DATETIME NOT NULL,
 	fechaBorrado DATETIME NULL
 ) 
@@ -95,9 +95,9 @@ CREATE TABLE datosPaciente.Paciente
 )
 
 -----------------------------------------------------------------------------------
--- Creo un usuario generico, un estudio genÈrico, una cobertura generica y un prestador genÈrico
+-- Creo un usuario generico, un estudio gen√©rico, una cobertura generica y un prestador gen√©rico
 
-INSERT INTO datosPaciente.Usuario (contraseÒa, fechaCreacion, fechaBorrado)
+INSERT INTO datosPaciente.Usuario (contrase√±a, fechaCreacion, fechaBorrado)
 VALUES
 ('12345678', GETDATE(), NULL)
 SELECT * FROM datosPaciente.Usuario
@@ -116,12 +116,12 @@ VALUES
 ('Generico', 1, GETDATE(), 1)
 SELECT * FROM datosPaciente.Cobertura
 
--- LUEGO DEJAR DOCUMENTACI”N DEL BULK INSERT
+-- LUEGO DEJAR DOCUMENTACI√ìN DEL BULK INSERT
 
 -- Cosas a tener en cuenta: Este SP es para una carga de registros NUEVOS.
--- No admite la modificaciÛn de los ya ingresados.
--- Contemplamos asignar un usuario genÈrico al ser la primera vez que ingresa, con una contraseÒa 12345678
--- Luego el usuario deber· cambiar su contraseÒa
+-- No admite la modificaci√≥n de los ya ingresados.
+-- Contemplamos asignar un usuario gen√©rico al ser la primera vez que ingresa, con una contrase√±a 12345678
+-- Luego el usuario deber√° cambiar su contrase√±a
 
 GO
 CREATE OR ALTER PROCEDURE datosPaciente.CargarDatosDesdeCSV_Pacientes
@@ -179,7 +179,7 @@ BEGIN
 	CAST(T.Nrodocumento AS int)
 	FROM #TempTable T
 
-	-- Realizar transformaciÛn de datos y luego insertar en la tabla de destino
+	-- Realizar transformaci√≥n de datos y luego insertar en la tabla de destino
 	INSERT INTO datosPaciente.Paciente(nombre, apellido, apellidomaterno, fechaNacimiento, tipoDocumento,
 				nroDocumento, sexo, genero, nacionalidad, fotoPerfil, mail, telefonoFijo, telefonoContactoAlternativo, telefonoLaboral,
 				fechaRegistro, fechaActualizacion, idUsuario, idEstudio, idCobertura, idUsuarioActualizacion)
@@ -211,7 +211,7 @@ EXEC datosPaciente.CargarDatosDesdeCSV_Pacientes
 SELECT * FROM datosPaciente.Domicilio
 SELECT * FROM datosPaciente.Paciente
 
--- C”DIGO DE DASHA PARA M…DICOS: NO LO PROB…
+-- C√ìDIGO DE DASHA PARA M√âDICOS: NO LO PROB√â
 
 CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Medicos
 AS
@@ -238,7 +238,7 @@ BEGIN
 	);
 
 	
-	-- Realizar transformaciÛn de datos y luego insertar en la tabla de destino
+	-- Realizar transformaci√≥n de datos y luego insertar en la tabla de destino
 	INSERT INTO salud.Medico(nombre, apellido, idEspecialidad, nroMatricula)
 	SELECT 
 		CAST(T.Nombre AS VARCHAR(20)),  
@@ -250,6 +250,75 @@ BEGIN
 
 	SELECT * FROM #TempTable
 
-	-- Eliminar la tabla temporal despuÈs de su uso 
+	-- Eliminar la tabla temporal despu√©s de su uso 
 	--DROP TABLE #TempTable;		lo comente para poder ver como se guardaban, despues descomentar
+END 
+
+		
+CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Sedes
+AS
+BEGIN
+	-- Crear una tabla temporal con la misma estructura que el archivo CSV
+	CREATE TABLE #TempTable
+	(
+		nombre NVARCHAR(30) NOT NULL,
+		direccion NVARCHAR(30) NOT NULL,
+		localidad NVARCHAR(30),
+		provincia NVARCHAR(30),
+	);
+
+	-- Cargar datos desde el archivo CSV en la tabla temporal
+	BULK INSERT #TempTable
+	FROM 'C:\Dataset\Sedes.csv'
+	WITH (
+		FIELDTERMINATOR = ';',  
+		ROWTERMINATOR = '\n',
+		FIRSTROW = 2
+		--,ERRORFILE = 'C:\Dataset\ErroresSedes.csv'
+	);
+		-- Realizar transformaci√≥n de datos y luego insertar en la tabla de destino
+	INSERT INTO datosAtencion.SedeAtencion2(nombre, direccion, fechaBorrado)
+	SELECT 
+		CAST(T.nombre AS NVARCHAR(30)),  
+		CAST(T.direccion AS NVARCHAR(30)),
+		NULL
+	FROM #TempTable T 
+
+	--SELECT * FROM #TempTable
+
+	-- Eliminar la tabla temporal despu√©s de su uso 
+	DROP TABLE #TempTable;
+END 
+
+CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Prestadores
+AS
+BEGIN
+	-- Crear una tabla temporal con la misma estructura que el archivo CSV
+	CREATE TABLE #TempTable
+	(
+		nombre NVARCHAR(30) NOT NULL,
+		tipoPlan NVARCHAR(30) NOT NULL,
+		fechaBorrado DATETIME NULL,
+		campoExtra CHAR NULL,
+	);
+
+	-- Cargar datos desde el archivo CSV en la tabla temporal
+	FROM 'C:\Dataset\Prestador.csv'
+	WITH (
+		FIELDTERMINATOR = ';',  
+		ROWTERMINATOR = '\n',
+		FIRSTROW = 2
+	);
+	SELECT * FROM #TempTable
+		-- Realizar transformaci√≥n de datos y luego insertar en la tabla de destino
+	INSERT INTO datosPaciente.Prestador(nombre, tipoPlan, fechaBorrado)
+	SELECT 
+		CAST(T.nombre AS NVARCHAR(30)),  
+		CAST(T.tipoPlan AS NVARCHAR(30)),
+		NULL
+	FROM #TempTable T 
+
+
+	-- Eliminar la tabla temporal despu√©s de su uso 
+	DROP TABLE #TempTable;	--	lo comente para poder ver como se guardaban, despues descomentar
 END 
