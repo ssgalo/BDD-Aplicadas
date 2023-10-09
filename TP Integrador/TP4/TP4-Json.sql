@@ -1,7 +1,7 @@
 use ClinicaCureSA
 go
 
-CREATE TABLE Centro_Autorizaciones (
+CREATE TABLE Centro_Autorizaciones (		--si dejamos esta opcion hay que agregarle el esquema 
     Area varchar(30),
     Estudio varchar(30),
     Prestador varchar(30),
