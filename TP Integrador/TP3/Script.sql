@@ -41,8 +41,8 @@ go
 CREATE TABLE datosPaciente.Prestador
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	nombre NVARCHAR(20) NOT NULL,
-	tipoPlan NVARCHAR(10) NOT NULL,
+	nombre NVARCHAR(40) NOT NULL,
+	tipoPlan NVARCHAR(40) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
@@ -131,7 +131,7 @@ CREATE TABLE datosAtencion.SedeAtencion
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	nombre NVARCHAR(20) NOT NULL,
-	direccion NVARCHAR(20) NOT NULL,
+	direccion NVARCHAR(30) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
