@@ -432,7 +432,7 @@ WITH(
 );
 go
 
-select * from datosAtencion.Centro_Autorizaciones
+--select * from datosAtencion.Centro_Autorizaciones
 
 -----------------------------------------------------------------------------------
 -- Generar archivo XML detallando los turnos atendidos para informar a la Obra Social
@@ -509,7 +509,6 @@ VALUES
     ('2023-10-12', '16:45:00', 4, 4, 3, 25111023);
 go
 
-EXEC GenerarInformeTurnos 'Union Personal', '2023-01-01', '2023-11-30';
 EXEC CargarDatosDesdeCSV_Prestadores
 EXEC CargarDatosDesdeCSV_Sedes
 
@@ -522,6 +521,6 @@ VALUES
 	('imagen3.jpg', 0505, '2023-10-09 12:45:00', 7, NULL);
 go
 
-EXEC GenerarInformeTurnos 'Union Personal', '2023-01-01', '2023-11-30';
+EXEC GenerarInformeTurnos 'Generico', '2023-01-01', '2023-11-30';
 
 SELECT * FROM datosAtencion.Centro_Autorizaciones
