@@ -1,8 +1,8 @@
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
-CREATE DATABASE ClinicaCureSA
+CREATE DATABASE ClinicaCureSA_TP3
 GO
 
-USE ClinicaCureSA
+USE ClinicaCureSA_TP3
 GO
 
 CREATE SCHEMA datosPaciente
@@ -41,8 +41,8 @@ go
 CREATE TABLE datosPaciente.Prestador
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	nombre NVARCHAR(20) NOT NULL,
-	tipoPlan NVARCHAR(10) NOT NULL,
+	nombre NVARCHAR(40) NOT NULL,
+	tipoPlan NVARCHAR(40) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
@@ -93,14 +93,12 @@ CREATE TABLE datosPaciente.Paciente
 	idUsuario INT NOT NULL,
 	idEstudio INT NOT NULL,
 	idCobertura INT NOT NULL,
-	idDomicilio INT NOT NULL,
 	idUsuarioActualizacion INT NULL,
 	fechaBorrado DATETIME NULL,
 	CONSTRAINT PK_Paciente PRIMARY KEY (nroDocumento),
 	CONSTRAINT FK_Usuario FOREIGN KEY (idUsuario) REFERENCES datosPaciente.Usuario(id),
 	CONSTRAINT FK_Estudio FOREIGN KEY (idEstudio) REFERENCES datosPaciente.Estudio(id),
-	CONSTRAINT FK_Cobertura FOREIGN KEY (idCobertura) REFERENCES datosPaciente.Cobertura(id),
-	CONSTRAINT FK_Domicilio FOREIGN KEY (idDomicilio) REFERENCES datosPaciente.Domicilio(id)
+	CONSTRAINT FK_Cobertura FOREIGN KEY (idCobertura) REFERENCES datosPaciente.Cobertura(id)
 )
 GO
 
@@ -131,7 +129,7 @@ CREATE TABLE datosAtencion.SedeAtencion
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	nombre NVARCHAR(20) NOT NULL,
-	direccion NVARCHAR(20) NOT NULL,
+	direccion NVARCHAR(30) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
