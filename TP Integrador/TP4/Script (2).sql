@@ -189,28 +189,7 @@ EXEC datosPaciente.CargarDatosDesdeCSV_Pacientes -- carga las listas: Paciente y
 go
 
 
-INSERT INTO datosAtencion.Especialidad (nombre)	--tal cual los que figuran en la tabla de medicos
-VALUES
-    ('CLINICA MEDICA'),
-    ('MEDICINA FAMILIAR'),
-    ('ALERGIA'),
-    ('CARDIOLOGIA'),
-	('DERMATOLOGIA'),
-	('ENDOCRINLOGIA'),
-	('FONOAUDIOLOGIA'),
-	('GASTROENTEROLOGIA'),
-	('GINECOLOGIA'),
-	('HEPATOLOGÍA'),
-	('KINESIOLOGIA'),
-	('NEUROLOGIA'),
-	('NUTRICION'),
-	('OBSTETRICIA'),
-	('OFTALMOLOGIA'),
-	('TRAUMATOLOGIA'),
-	('UROLOGIA');
-go
-
-EXEC CargarDatosDesdeCSV_Medicos
+EXEC CargarDatosDesdeCSV_Medicos -- carga las listas: Medicos y especialidad
 go
 
 INSERT INTO datosReserva.EstadoTurno (nombreEstado, fechaBorrado) -- tal cual indica el der
@@ -343,6 +322,7 @@ AS
 BEGIN
 	--Borrar datos anteriores CONSULTAR! Lo agrego porque se supone que se manda uno nuevo actualizado cada mes
 	delete from datosAtencion.Medico
+	delete from datosAtencion.Especialidad
 
 	-- Crear una tabla temporal con la misma estructura que el archivo CSV
 	CREATE TABLE #TempTable
@@ -362,7 +342,11 @@ BEGIN
 		FIRSTROW = 2
 	);
 
-	
+	INSERT INTO datosAtencion.Especialidad (nombre)
+	SELECT 
+	DISTINCT(Especialidad) 
+	FROM #tempTable T
+
 	-- Realizar transformación de datos y luego insertar en la tabla de destino
 	INSERT INTO datosAtencion.Medico(nombre, apellido, idEspecialidad, nroMatricula)
 	SELECT 
