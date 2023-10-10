@@ -163,7 +163,7 @@ SELECT * FROM datosPaciente.Paciente --
 SELECT * FROM datosAtencion.Especialidad	
 SELECT * FROM datosAtencion.Medico
 SELECT * FROM datosReserva.EstadoTurno
-SELECT * FROM datosReserva.Reserva --FALTA
+SELECT * FROM datosReserva.Reserva 
 
 
 --EXEC CargarDatosDesdeCSV_Prestadores -- NO ME FUNCIONA asiq cargo genericos
