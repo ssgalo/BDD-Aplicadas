@@ -1,3 +1,54 @@
+---- COMIENZO ENUNCIADO ----
+/*
+Se presenta un modelo de base de datos a implementar por el hospital Cure SA, para la reserva 
+de turnos médicos y la visualización de estudios clínicos realizados (ver archivo Clinica Cure 
+SA.png).
+Para facilitar la lectura del diagrama se informa la identificación de la cardinalidad en las 
+relaciones
+Aclaraciones:
+El modelo es el esquema inicial, en caso de ser necesario agregue las relaciones/entidades que 
+sean convenientes.
+Los turnos para estudios clínicos no se encuentran dentro del alcance del desarrollo del 
+sistema actual.
+Los estudios clínicos son ingresados al sistema por el técnico encargado de realizar el estudio, 
+una vez finalizado el estudio (en el caso de las imágenes) y en el caso de los laboratorios cuando 
+el mismo se encuentre terminado.
+Los turnos para atención médica tienen como estado inicial disponible, según el médico, la 
+especialidad y la sede.
+Los prestadores están conformador por Obras Sociales y Prepagas con las cuales se establece 
+una alianza comercial. Dicha alianza puede finalizar en cualquier momento, por lo cual debe 
+poder ser actualizable de forma inmediata si el contrato no está vigente. En caso de no estar 
+vigente el contrato, deben ser anulados todos los turnos de pacientes que se encuentren 
+vinculados a esa prestadora y pasar a estado disponible.
+Los estudios clínicos deben ser autorizados, e indicar si se cubre el costo completo del mismo o 
+solo un porcentaje. El sistema de Cure se comunica con el servicio de la prestadora, se le envía 
+el código del estudio, el dni del paciente y el plan; el sistema de la prestadora informa si está 
+autorizado o no y el importe a facturarle al paciente.
+Los roles establecidos al inicio del proyecto son:
+• Paciente
+• Medico
+• Personal Administrativo
+• Personal Técnico clínico
+• Administrador General
+El usuario web se define utilizando el DNI
+*/
+---- FIN ENUNCIADO ----
+
+---- COMIENZO DATOS ENTREGA ----
+/*
+	Fecha de Entrega: 10/10/2023
+	Número de grupo: 6
+	Nombre de la Materia: Bases de Datos Aplicadas
+	
+	Integrantes del grupo:
+	Santiago Galo 		- 43473506
+	Juan Manuel Pergola - 39515920
+	Dasha Apollaro		- 44448125
+	Johnathan Portillo	- 43458310
+*/
+---- FIN DATOS ENTREGA ----
+
+
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
 CREATE DATABASE ClinicaCureSA_TP3
 GO

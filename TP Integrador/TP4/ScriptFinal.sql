@@ -1,3 +1,43 @@
+---- COMIENZO ENUNCIADO ----
+/*
+Se proveen maestros de Médicos, Pacientes, Prestadores y Sedes en formato CSV. También se 
+dispone de un archivo JSON que contiene la parametrización del mecanismo de autorización 
+según estudio y obra social, además de porcentaje cubierto, etc. Ver archivo “Datasets para 
+importar” en Miel.
+Se requiere que importe toda la información antes mencionada a la base de datos. Genere los 
+objetos necesarios (store procedures, funciones, etc.) para importar los archivos antes 
+mencionados. Tenga en cuenta que cada mes se recibirán archivos de novedades con la misma 
+estructura pero datos nuevos para agregar a cada maestro. Considere este comportamiento al 
+generar el código. Debe admitir la importación de novedades periódicamente.
+La estructura/esquema de las tablas a generar será decisión suya. Puede que deba realizar 
+procesos de transformación sobre los maestros recibidos para adaptarlos a la estructura 
+requerida. 
+Los archivos CSV/JSON no deben modificarse. En caso de que haya datos mal cargados, 
+incompletos, erróneos, etc., deberá contemplarlo y realizar las correcciones en el fuente SQL. 
+(Sería una excepción si el archivo está malformado y no es posible interpretarlo como JSON o 
+CSV). Documente las correcciones que haga indicando número de línea, contenido previo y 
+contenido nuevo. Esto se cotejará para constatar que cumpla correctamente la consigna.
+Adicionalmente se requiere que el sistema sea capaz de generar un archivo XML detallando los 
+turnos atendidos para informar a la Obra Social. El mismo debe constar de los datos del paciente 
+(Apellido, nombre, DNI), nombre y matrícula del profesional que lo atendió, fecha, hora, 
+especialidad. Los parámetros de entrada son el nombre de la obra social y un intervalo de fechas.
+*/
+---- FIN ENUNCIADO ----
+
+---- COMIENZO DATOS ENTREGA ----
+/*
+	Fecha de Entrega: 10/10/2023
+	Número de grupo: 6
+	Nombre de la Materia: Bases de Datos Aplicadas
+	
+	Integrantes del grupo:
+	Santiago Galo 		- 43473506
+	Juan Manuel Pergola - 39515920
+	Dasha Apollaro		- 44448125
+	Johnathan Portillo	- 43458310
+*/
+---- FIN DATOS ENTREGA ----
+
 -- drop database ClinicaCureSA_TP4
 
 create database ClinicaCureSA_TP4
