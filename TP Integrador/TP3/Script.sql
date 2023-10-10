@@ -93,7 +93,6 @@ CREATE TABLE datosPaciente.Paciente
 	idUsuario INT NOT NULL,
 	idEstudio INT NOT NULL,
 	idCobertura INT NOT NULL,
-	idDomicilio INT NOT NULL,
 	idUsuarioActualizacion INT NULL,
 	fechaBorrado DATETIME NULL,
 	CONSTRAINT PK_Paciente PRIMARY KEY (nroDocumento),
