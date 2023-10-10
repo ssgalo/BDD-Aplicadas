@@ -1,6 +1,8 @@
-create database pruebaCSV2
+-- drop database ClinicaCureSA_TP4
 
-use pruebaCSV2
+create database ClinicaCureSA_TP4
+go
+use ClinicaCureSA_TP4
 
 GO
 CREATE SCHEMA datosPaciente
@@ -37,8 +39,8 @@ go
 CREATE TABLE datosPaciente.Prestador	
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	nombre NVARCHAR(20) NOT NULL,
-	tipoPlan NVARCHAR(10) NOT NULL,
+	nombre NVARCHAR(40) NOT NULL,
+	tipoPlan NVARCHAR(40) NOT NULL,
 	fechaBorrado DATETIME NULL
 )
 GO
@@ -112,6 +114,15 @@ CREATE TABLE datosAtencion.Especialidad
 )
 GO
 
+CREATE TABLE datosAtencion.SedeAtencion
+(
+	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	nombre NVARCHAR(20) NOT NULL,
+	direccion NVARCHAR(30) NOT NULL,
+	fechaBorrado DATETIME NULL
+)
+GO
+
 CREATE TABLE datosAtencion.Medico
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -166,59 +177,7 @@ SELECT * FROM datosReserva.EstadoTurno
 SELECT * FROM datosReserva.Reserva 
 
 
---EXEC CargarDatosDesdeCSV_Prestadores -- NO ME FUNCIONA asiq cargo genericos
-INSERT INTO datosPaciente.Prestador(nombre, tipoPlan, fechaBorrado) VALUES
-	('Union Personal', 'Classic', NULL),
-	('Union Personal', 'Familiar', NULL),
-	('Osecac', 'Pmo', NULL),
-	('Osecac', 'Azul', NULL),
-	('Medicus', 'Family', NULL),
-	('Medicus', 'Plan Mujer', NULL),
-	('OSDE', 'OSDE 410', NULL)
-
-INSERT INTO datosPaciente.Cobertura (imagenCredencial, nroSocio, fechaRegistro, idPrestador, fechaBorrado) -- coberturas genericas
-VALUES
-    ('imagen1.jpg', 0101, '2023-10-09 08:00:00', 1, NULL),
-    ('imagen2.jpg', 0202, '2023-10-09 09:30:00', 2, NULL),
-    ('imagen3.jpg', 0303, '2023-10-09 10:45:00', 3, NULL),
-	('imagen3.jpg', 0404, '2023-10-09 11:45:00', 6, NULL),
-	('imagen3.jpg', 0505, '2023-10-09 12:45:00', 7, NULL);
-go
-
-EXEC datosPaciente.CargarDatosDesdeCSV_Pacientes -- carga las listas: Paciente y Domicilio
-go
-
-
-EXEC CargarDatosDesdeCSV_Medicos -- carga las listas: Medicos y especialidad
-go
-
-INSERT INTO datosReserva.EstadoTurno (nombreEstado, fechaBorrado) -- tal cual indica el der
-VALUES
-    ('Atendido', NULL),
-	('Ausente', NULL),
-    ('Cancelado', NULL);
-go
-
-INSERT INTO datosReserva.Reserva (fecha, hora, idMedico, idEspecialidad, idEstadoTurno, idPaciente)	-- reservas genericas
-VALUES
-    ('2023-10-09', '09:00:00', 1, 1, 2, 25111003),
-    ('2023-10-10', '14:30:00', 2, 2, 1, 25111004),
-    ('2023-10-11', '11:15:00', 3, 3, 2, 25111015),
-    ('2023-10-12', '16:45:00', 4, 4, 3, 25111023);
-go
-
-
------------------------------------------------------------------------------------
--- Creo un usuario generico, un estudio genérico, una cobertura generica y un prestador genérico 
-
-INSERT INTO datosPaciente.Usuario (contraseña, fechaCreacion, fechaBorrado)
-VALUES
-('12345678', GETDATE(), NULL)
-SELECT * FROM datosPaciente.Usuario
-
-INSERT INTO datosPaciente.Estudio (fecha, nombre, autorizado, linkDocumentoResultado, imagenResultado, fechaBorrado)
-VALUES
-(GETDATE(), 'Generico', 0, 'Generico', 'Generico', NULL) 
+--EXEC CargarDatosDesdeCSV_Prestadores -- NO ME FUNCIONA asi que cargo genericos
 
 ----------------------------------------------------------------------------------
 -- Creacion de los SP para cargar los datos desde CSV
@@ -232,7 +191,7 @@ VALUES
 
 
 GO
-CREATE OR ALTER PROCEDURE datosPaciente.CargarDatosDesdeCSV_Pacientes
+CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Pacientes
 AS
 BEGIN
 	DECLARE @cantRegistrosDomicilio INT;
@@ -313,6 +272,8 @@ BEGIN
 		1,
 		NULL
 	FROM #TempTable T 
+
+	DROP TABLE #TempTable;
 END
 go
 
@@ -386,7 +347,7 @@ BEGIN
 		--,ERRORFILE = 'C:\Dataset\ErroresSedes.csv'
 	);
 		-- Realizar transformación de datos y luego insertar en la tabla de destino
-	INSERT INTO datosAtencion.SedeAtencion2(nombre, direccion, fechaBorrado)
+	INSERT INTO datosAtencion.SedeAtencion(nombre, direccion, fechaBorrado)
 	SELECT 
 		CAST(T.nombre AS NVARCHAR(30)),  
 		CAST(T.direccion AS NVARCHAR(30)),
@@ -406,10 +367,8 @@ BEGIN
 	-- Crear una tabla temporal con la misma estructura que el archivo CSV
 	CREATE TABLE #TempTable
 	(
-		nombre NVARCHAR(30) NOT NULL,
-		tipoPlan NVARCHAR(30) NOT NULL,
-		fechaBorrado DATETIME NULL,
-		campoExtra CHAR NULL,
+		nombre NVARCHAR(40) NOT NULL,
+		tipoPlan NVARCHAR(40) NOT NULL
 	);
 
 	-- Cargar datos desde el archivo CSV en la tabla temporal
@@ -420,12 +379,12 @@ BEGIN
 		ROWTERMINATOR = '\n',
 		FIRSTROW = 2
 	);
-	SELECT * FROM #TempTable
-		-- Realizar transformación de datos y luego insertar en la tabla de destino
+	
+	-- Realizar transformación de datos y luego insertar en la tabla de destino
 	INSERT INTO datosPaciente.Prestador(nombre, tipoPlan, fechaBorrado)
 	SELECT 
 		CAST(T.nombre AS NVARCHAR(30)),  
-		CAST(T.tipoPlan AS NVARCHAR(30)),
+		CAST(REPLACE(T.tipoPlan, ';;', '') AS NVARCHAR(30)),
 		NULL
 	FROM #TempTable T 
 
@@ -446,7 +405,7 @@ go
 DECLARE @jsonEstudiosClinicos NVARCHAR(MAX);
 SET @jsonEstudiosClinicos = (
     SELECT * 
-    FROM OPENROWSET (BULK 'C:\Users\apoll\OneDrive\Escritorio\Dataset\Centro_Autorizaciones.Estudios clinicos.json', SINGLE_CLOB) as JsonFile
+    FROM OPENROWSET (BULK 'C:\Dataset\Centro_Autorizaciones.Estudios clinicos.json', SINGLE_CLOB) as JsonFile
 )
 -- Insertar los resultados de la consulta en la tabla creada
 INSERT INTO datosAtencion.Centro_Autorizaciones (Area, Estudio, Prestador, Programa, [Porcentaje Cobertura], Costo, [Requiere autorizacion])
@@ -477,7 +436,7 @@ select * from datosAtencion.Centro_Autorizaciones
 
 -----------------------------------------------------------------------------------
 -- Generar archivo XML detallando los turnos atendidos para informar a la Obra Social
-
+GO
 CREATE OR ALTER PROCEDURE GenerarInformeTurnos(
     @NombreObraSocial NVARCHAR(255),
     @FechaInicio DATE,
@@ -510,8 +469,59 @@ BEGIN
     FOR xml raw('Registro'), elements, root('XML');
 END
 GO
+--Esto devuelve toda 1 fila con los datos en formato xml, si los clickeas te abre una pestaña nueva y ahi se pueden guardar
+
+-----------------------------------------------------------------------------------
+-- Creo un usuario generico, un estudio genérico, una cobertura generica y un prestador genérico 
+
+INSERT INTO datosPaciente.Usuario (contraseña, fechaCreacion, fechaBorrado)
+VALUES
+('12345678', GETDATE(), NULL)
+
+INSERT INTO datosPaciente.Estudio (fecha, nombre, autorizado, linkDocumentoResultado, imagenResultado, fechaBorrado)
+VALUES
+(GETDATE(), 'Generico', 0, 'Generico', 'Generico', NULL) 
+
+INSERT INTO datosPaciente.Prestador(nombre, tipoPlan, fechaBorrado)
+VALUES
+('Generico', 'Generico', NULL)
+
+INSERT INTO datosPaciente.Cobertura(imagenCredencial, nroSocio, fechaRegistro, idPrestador)
+VALUES
+('Generico', 1, GETDATE(), 1)
+
+EXEC CargarDatosDesdeCSV_Pacientes
+
+EXEC CargarDatosDesdeCSV_Medicos
+
+INSERT INTO datosReserva.EstadoTurno (nombreEstado, fechaBorrado) -- tal cual indica el der
+VALUES
+    ('Atendido', NULL),
+	('Ausente', NULL),
+    ('Cancelado', NULL);
+go
+
+INSERT INTO datosReserva.Reserva (fecha, hora, idMedico, idEspecialidad, idEstadoTurno, idPaciente)	-- reservas genericas
+VALUES
+    ('2023-10-09', '09:00:00', 1, 1, 2, 25111003),
+    ('2023-10-10', '14:30:00', 2, 2, 1, 25111004),
+    ('2023-10-11', '11:15:00', 3, 3, 2, 25111015),
+    ('2023-10-12', '16:45:00', 4, 4, 3, 25111023);
+go
+
+EXEC GenerarInformeTurnos 'Union Personal', '2023-01-01', '2023-11-30';
+EXEC CargarDatosDesdeCSV_Prestadores
+EXEC CargarDatosDesdeCSV_Sedes
+
+INSERT INTO datosPaciente.Cobertura (imagenCredencial, nroSocio, fechaRegistro, idPrestador, fechaBorrado) -- coberturas genericas
+VALUES
+    ('imagen1.jpg', 0101, '2023-10-09 08:00:00', 1, NULL),
+    ('imagen2.jpg', 0202, '2023-10-09 09:30:00', 2, NULL),
+    ('imagen3.jpg', 0303, '2023-10-09 10:45:00', 3, NULL),
+	('imagen3.jpg', 0404, '2023-10-09 11:45:00', 6, NULL),
+	('imagen3.jpg', 0505, '2023-10-09 12:45:00', 7, NULL);
+go
 
 EXEC GenerarInformeTurnos 'Union Personal', '2023-01-01', '2023-11-30';
 
---Esto devuelve toda 1 fila con los datos en formato xml, si los clickeas te abre una pestaña nueva y ahi se pueden guardar
-
+SELECT * FROM datosAtencion.Centro_Autorizaciones
