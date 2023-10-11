@@ -27,7 +27,7 @@ especialidad. Los parámetros de entrada son el nombre de la obra social y un in
 ---- COMIENZO DATOS ENTREGA ----
 /*
 	Fecha de Entrega: 10/10/2023
-	Número de grupo: 6
+	Número de grupo: 12
 	Nombre de la Materia: Bases de Datos Aplicadas
 	
 	Integrantes del grupo:
