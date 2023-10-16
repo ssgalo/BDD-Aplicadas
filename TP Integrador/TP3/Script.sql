@@ -48,6 +48,8 @@ El usuario web se define utilizando el DNI
 */
 ---- FIN DATOS ENTREGA ----
 
+-- drop database ClinicaCureSA_TP3
+
 
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
 CREATE DATABASE ClinicaCureSA_TP3
@@ -1011,7 +1013,6 @@ CREATE PROCEDURE datosPaciente.InserPaciente
 	@telefonoLaboral VARCHAR(20),
 	@fechaRegistro DATE,
 	@idUsuario INT,
-	@idDomicilio INT,
 	@idEstudio INT
 )
 AS
@@ -1031,7 +1032,6 @@ BEGIN
 	 OR @telefonoContactoAlternativo = ''
 	 OR @telefonoLaboral = ''
 	 OR @fechaRegistro = ''
-	 OR @idUsuario IS NULL OR @idDomicilio IS NULL
 	 OR @idEstudio IS NULL
 	 )
 	BEGIN
@@ -1086,7 +1086,6 @@ CREATE PROCEDURE datosPaciente.ModifPaciente
 	@telefonoContactoAlternativo VARCHAR(20) = NULL,
 	@telefonoLaboral VARCHAR(20) = NULL,
 	@idUsuarioActualizacion INT = NULL,
-	@idDomicilio INT = NULL,
 	@idEstudio INT = NULL
 )
 AS
@@ -1120,7 +1119,6 @@ BEGIN
 			telefonoContactoAlternativo = ISNULL(@telefonoContactoAlternativo, telefonoContactoAlternativo),
 			telefonoLaboral		= ISNULL(@telefonoLaboral, telefonoLaboral),
 			fechaActualizacion	= GETDATE(),
-			idDomicilio			= ISNULL(@idDomicilio, idDomicilio),
 			idEstudio			= ISNULL(@idEstudio, idEstudio),
 			idUsuarioActualizacion = ISNULL(@idUsuarioActualizacion, idUsuarioActualizacion)
 	WHERE	idHistoriaClinica = @id

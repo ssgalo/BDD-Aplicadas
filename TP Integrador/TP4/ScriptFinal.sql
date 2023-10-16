@@ -38,8 +38,12 @@ especialidad. Los parámetros de entrada son el nombre de la obra social y un in
 */
 ---- FIN DATOS ENTREGA ----
 
+-- ACLARACIÓN: El siguiente TP N4 tiene también el código de creación de tablas y esquemas al igual que el TP N3.
+-- Sin embargo, tiene algunas modificaciones en las constraints y primary keys para que la importación de los datos pueda hacerse correctamente.
+
 -- drop database ClinicaCureSA_TP4
 
+---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
 create database ClinicaCureSA_TP4
 go
 use ClinicaCureSA_TP4
@@ -50,7 +54,7 @@ GO
 CREATE SCHEMA datosReserva
 GO
 CREATE SCHEMA datosAtencion
-
+---- FIN CREACION DE BASE DE DATOS Y ESQUEMAS ----
 GO
 
 CREATE TABLE datosPaciente.Usuario		
@@ -175,7 +179,8 @@ CREATE TABLE datosAtencion.Medico
 )
 GO
 
-CREATE TABLE datosReserva.Reserva --hay campos comentados a modo de simplificar el codigo ya que no necesitamos de dichos campos para esta parte del trabajo 
+-- hay campos comentados a modo de simplificar el codigo ya que no necesitamos de dichos campos para esta parte del trabajo
+CREATE TABLE datosReserva.Reserva  
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	fecha DATE NOT NULL,
@@ -207,14 +212,7 @@ CREATE TABLE datosAtencion.Centro_Autorizaciones (
 go
 
 ---------------------------------------------------------------------------------
--- Carga de datos en las tablas: 
-SELECT * FROM datosPaciente.Prestador -- No me funciona el SP
-SELECT * FROM datosPaciente.Cobertura
-SELECT * FROM datosPaciente.Paciente -- 
-SELECT * FROM datosAtencion.Especialidad	
-SELECT * FROM datosAtencion.Medico
-SELECT * FROM datosReserva.EstadoTurno
-SELECT * FROM datosReserva.Reserva 
+
 
 
 --EXEC CargarDatosDesdeCSV_Prestadores -- NO ME FUNCIONA asi que cargo genericos
@@ -267,7 +265,7 @@ BEGIN
 
 	-- Cargar datos desde el archivo CSV en la tabla temporal
 	BULK INSERT #TempTable
-	FROM 'C:\Dataset\Pacientes.csv'
+	FROM 'C:\importar\Pacientes.csv'
 	WITH (
 		FIELDTERMINATOR = ';',  
 		ROWTERMINATOR = '\n',
@@ -336,7 +334,7 @@ BEGIN
 
 	-- Cargar datos desde el archivo CSV en la tabla temporal
 	BULK INSERT #TempTable
-	FROM 'C:\Dataset\Medicos.csv'
+	FROM 'C:\importar\Medicos.csv'
 	WITH (
 		FIELDTERMINATOR = ';',  
 		ROWTERMINATOR = '\n',
@@ -379,7 +377,7 @@ BEGIN
 
 	-- Cargar datos desde el archivo CSV en la tabla temporal
 	BULK INSERT #TempTable
-	FROM 'C:\Dataset\Sedes.csv'
+	FROM 'C:\importar\Sedes.csv'
 	WITH (
 		FIELDTERMINATOR = ';',  
 		ROWTERMINATOR = '\n',
@@ -413,7 +411,7 @@ BEGIN
 
 	-- Cargar datos desde el archivo CSV en la tabla temporal
 	BULK INSERT #TempTable
-	FROM 'C:\Dataset\Prestador.csv'
+	FROM 'C:\importar\Prestador.csv'
 	WITH (
 		FIELDTERMINATOR = ';',  
 		ROWTERMINATOR = '\n',
@@ -438,14 +436,16 @@ go
 -- Importar contenido del archivo JSON a nuestra tabla datosAtencion.Centro_Autorizaciones
 
 -- Vaciamos la tabla
+CREATE OR ALTER PROCEDURE CargarDatosDesdeJSON
+AS
+BEGIN
 DELETE FROM datosAtencion.Centro_Autorizaciones
-go
 
 -- Guardamos nuestro json en una variable
 DECLARE @jsonEstudiosClinicos NVARCHAR(MAX);
 SET @jsonEstudiosClinicos = (
     SELECT * 
-    FROM OPENROWSET (BULK 'C:\Dataset\Centro_Autorizaciones.Estudios clinicos.json', SINGLE_CLOB) as JsonFile
+    FROM OPENROWSET (BULK 'C:\importar\Centro_Autorizaciones.Estudios clinicos.json', SINGLE_CLOB) as JsonFile
 )
 -- Insertar los resultados de la consulta en la tabla creada
 INSERT INTO datosAtencion.Centro_Autorizaciones (Area, Estudio, Prestador, Programa, [Porcentaje Cobertura], Costo, [Requiere autorizacion])
@@ -470,7 +470,7 @@ WITH(
     Costo money '$.Costo',
     [Requiere autorizacion] bit '$."Requiere autorizacion"'
 );
-go
+END
 
 --select * from datosAtencion.Centro_Autorizaciones
 
@@ -514,53 +514,8 @@ GO
 -----------------------------------------------------------------------------------
 -- Creo un usuario generico, un estudio genérico, una cobertura generica y un prestador genérico 
 
-INSERT INTO datosPaciente.Usuario (contraseña, fechaCreacion, fechaBorrado)
-VALUES
-('12345678', GETDATE(), NULL)
 
-INSERT INTO datosPaciente.Estudio (fecha, nombre, autorizado, linkDocumentoResultado, imagenResultado, fechaBorrado)
-VALUES
-(GETDATE(), 'Generico', 0, 'Generico', 'Generico', NULL) 
 
-INSERT INTO datosPaciente.Prestador(nombre, tipoPlan, fechaBorrado)
-VALUES
-('Generico', 'Generico', NULL)
 
-INSERT INTO datosPaciente.Cobertura(imagenCredencial, nroSocio, fechaRegistro, idPrestador)
-VALUES
-('Generico', 1, GETDATE(), 1)
 
-EXEC CargarDatosDesdeCSV_Pacientes
 
-EXEC CargarDatosDesdeCSV_Medicos
-
-INSERT INTO datosReserva.EstadoTurno (nombreEstado, fechaBorrado) -- tal cual indica el der
-VALUES
-    ('Atendido', NULL),
-	('Ausente', NULL),
-    ('Cancelado', NULL);
-go
-
-INSERT INTO datosReserva.Reserva (fecha, hora, idMedico, idEspecialidad, idEstadoTurno, idPaciente)	-- reservas genericas
-VALUES
-    ('2023-10-09', '09:00:00', 1, 1, 2, 25111003),
-    ('2023-10-10', '14:30:00', 2, 2, 1, 25111004),
-    ('2023-10-11', '11:15:00', 3, 3, 2, 25111015),
-    ('2023-10-12', '16:45:00', 4, 4, 3, 25111023);
-go
-
-EXEC CargarDatosDesdeCSV_Prestadores
-EXEC CargarDatosDesdeCSV_Sedes
-
-INSERT INTO datosPaciente.Cobertura (imagenCredencial, nroSocio, fechaRegistro, idPrestador, fechaBorrado) -- coberturas genericas
-VALUES
-    ('imagen1.jpg', 0101, '2023-10-09 08:00:00', 1, NULL),
-    ('imagen2.jpg', 0202, '2023-10-09 09:30:00', 2, NULL),
-    ('imagen3.jpg', 0303, '2023-10-09 10:45:00', 3, NULL),
-	('imagen3.jpg', 0404, '2023-10-09 11:45:00', 6, NULL),
-	('imagen3.jpg', 0505, '2023-10-09 12:45:00', 7, NULL);
-go
-
-EXEC GenerarInformeTurnos 'Generico', '2023-01-01', '2023-11-30';
-
-SELECT * FROM datosAtencion.Centro_Autorizaciones
