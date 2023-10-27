@@ -205,8 +205,8 @@ CREATE TABLE datosAtencion.Centro_Autorizaciones (
     Estudio varchar(30),
     Prestador varchar(30),
     Programa varchar(50),
-    [Porcentaje Cobertura] float,
-    Costo float,
+    [Porcentaje Cobertura] decimal(5,2),
+    Costo money,
     [Requiere autorizacion] varchar(5) -- Usamos varchar para guardar 'True' o 'False'
 );
 go
