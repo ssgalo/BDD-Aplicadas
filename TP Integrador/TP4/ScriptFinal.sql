@@ -57,6 +57,15 @@ CREATE SCHEMA datosAtencion
 ---- FIN CREACION DE BASE DE DATOS Y ESQUEMAS ----
 GO
 
+IF OBJECT_ID('datosPaciente.Usuario') IS NOT NULL
+BEGIN
+    DROP TABLE datosPaciente.Usuario
+    IF OBJECT_ID('datosPaciente.Usuario') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Usuario.'
+    ELSE
+        PRINT 'Tabla datosPaciente.Usuario eliminada correctamente.'
+END
+GO
 CREATE TABLE datosPaciente.Usuario		
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -66,6 +75,15 @@ CREATE TABLE datosPaciente.Usuario
 ) 
 GO
 
+IF OBJECT_ID('datosPaciente.Domicilio') IS NOT NULL
+BEGIN
+    DROP TABLE datosPaciente.Domicilio
+    IF OBJECT_ID('datosPaciente.Domicilio') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Domicilio.'
+    ELSE
+        PRINT 'Tabla datosPaciente.Domicilio eliminada correctamente.'
+END
+GO
 CREATE TABLE datosPaciente.Domicilio	
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -80,6 +98,15 @@ CREATE TABLE datosPaciente.Domicilio
 )
 go
 
+IF OBJECT_ID('datosPaciente.Prestador') IS NOT NULL
+BEGIN
+    DROP TABLE datosPaciente.Prestador
+    IF OBJECT_ID('datosPaciente.Prestador') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Prestador.'
+    ELSE
+        PRINT 'Tabla datosPaciente.Prestador eliminada correctamente.'
+END
+GO
 CREATE TABLE datosPaciente.Prestador	
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -89,6 +116,15 @@ CREATE TABLE datosPaciente.Prestador
 )
 GO
 
+IF OBJECT_ID('datosPaciente.Cobertura') IS NOT NULL
+BEGIN
+    DROP TABLE datosPaciente.Cobertura
+    IF OBJECT_ID('datosPaciente.Cobertura') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Cobertura.'
+    ELSE
+        PRINT 'Tabla datosPaciente.Cobertura eliminada correctamente.'
+END
+GO
 CREATE TABLE datosPaciente.Cobertura	
 (
 	id INT IDENTITY(1,1) PRIMARY KEY not null,
@@ -101,6 +137,15 @@ CREATE TABLE datosPaciente.Cobertura
 )
 GO
 
+IF OBJECT_ID('datosPaciente.Estudio') IS NOT NULL
+BEGIN
+    DROP TABLE datosPaciente.Estudio
+    IF OBJECT_ID('datosPaciente.Estudio') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Estudio.'
+    ELSE
+        PRINT 'Tabla datosPaciente.Estudio eliminada correctamente.'
+END
+GO
 CREATE TABLE datosPaciente.Estudio
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -113,6 +158,15 @@ CREATE TABLE datosPaciente.Estudio
 )
 GO
 
+IF OBJECT_ID('datosPaciente.Paciente') IS NOT NULL
+BEGIN
+    DROP TABLE datosPaciente.Paciente
+    IF OBJECT_ID('datosPaciente.Paciente') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Paciente.'
+    ELSE
+        PRINT 'Tabla datosPaciente.Paciente eliminada correctamente.'
+END
+GO
 CREATE TABLE datosPaciente.Paciente 
 (
 	idHistoriaClinica INT IDENTITY(1,1) NOT NULL,
@@ -142,7 +196,17 @@ CREATE TABLE datosPaciente.Paciente
 	CONSTRAINT FK_Estudio FOREIGN KEY (idEstudio) REFERENCES datosPaciente.Estudio(id),
 	CONSTRAINT FK_Cobertura FOREIGN KEY (idCobertura) REFERENCES datosPaciente.Cobertura(id)
 )
+GO
 
+IF OBJECT_ID('datosReserva.EstadoTurno') IS NOT NULL
+BEGIN
+    DROP TABLE datosReserva.EstadoTurno
+    IF OBJECT_ID('datosReserva.EstadoTurno') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.EstadoTurno.'
+    ELSE
+        PRINT 'Tabla datosReserva.EstadoTurno eliminada correctamente.'
+END
+GO
 CREATE TABLE datosReserva.EstadoTurno
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -151,6 +215,15 @@ CREATE TABLE datosReserva.EstadoTurno
 )
 GO
 
+IF OBJECT_ID('datosAtencion.Especialidad') IS NOT NULL
+BEGIN
+    DROP TABLE datosAtencion.Especialidad
+    IF OBJECT_ID('datosAtencion.Especialidad') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Especialidad.'
+    ELSE
+        PRINT 'Tabla datosAtencion.Especialidad eliminada correctamente.'
+END
+GO
 CREATE TABLE datosAtencion.Especialidad
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -158,6 +231,15 @@ CREATE TABLE datosAtencion.Especialidad
 )
 GO
 
+IF OBJECT_ID('datosAtencion.SedeAtencion') IS NOT NULL
+BEGIN
+    DROP TABLE datosAtencion.SedeAtencion
+    IF OBJECT_ID('datosAtencion.SedeAtencion') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.SedeAtencion.'
+    ELSE
+        PRINT 'Tabla datosAtencion.SedeAtencion eliminada correctamente.'
+END
+GO
 CREATE TABLE datosAtencion.SedeAtencion
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -167,6 +249,15 @@ CREATE TABLE datosAtencion.SedeAtencion
 )
 GO
 
+IF OBJECT_ID('datosAtencion.Medico') IS NOT NULL
+BEGIN
+    DROP TABLE datosAtencion.Medico
+    IF OBJECT_ID('datosAtencion.Medico') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Medico.'
+    ELSE
+        PRINT 'Tabla datosAtencion.Medico eliminada correctamente.'
+END
+GO
 CREATE TABLE datosAtencion.Medico
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -180,7 +271,16 @@ CREATE TABLE datosAtencion.Medico
 GO
 
 -- hay campos comentados a modo de simplificar el codigo ya que no necesitamos de dichos campos para esta parte del trabajo
-CREATE TABLE datosReserva.Reserva  
+IF OBJECT_ID('datosReserva.Reserva') IS NOT NULL
+BEGIN
+    DROP TABLE datosReserva.Reserva
+    IF OBJECT_ID('datosReserva.Reserva') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.Reserva.'
+    ELSE
+        PRINT 'Tabla datosReserva.Reserva eliminada correctamente.'
+END
+GO
+CREATE TABLE datosReserva.Reserva
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	fecha DATE NOT NULL,
@@ -200,6 +300,15 @@ CREATE TABLE datosReserva.Reserva
 GO
 
 -- Tabla creada para almacenar el JSON
+IF OBJECT_ID('datosAtencion.Centro_Autorizaciones') IS NOT NULL
+BEGIN
+    DROP TABLE datosAtencion.Centro_Autorizaciones
+    IF OBJECT_ID('datosAtencion.Centro_Autorizaciones') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Centro_Autorizaciones.'
+    ELSE
+        PRINT 'Tabla datosAtencion.Centro_Autorizaciones eliminada correctamente.'
+END
+GO
 CREATE TABLE datosAtencion.Centro_Autorizaciones (
     Area varchar(30),
     Estudio varchar(30),
@@ -209,7 +318,7 @@ CREATE TABLE datosAtencion.Centro_Autorizaciones (
     Costo money,
     [Requiere autorizacion] varchar(5) -- Usamos varchar para guardar 'True' o 'False'
 );
-go
+GO
 
 ---------------------------------------------------------------------------------
 
@@ -228,6 +337,14 @@ go
 -- Luego el usuario deberá cambiar su contraseña
 
 
+IF OBJECT_ID('CargarDatosDesdeCSV_Pacientes') IS NOT NULL
+BEGIN
+    DROP PROCEDURE CargarDatosDesdeCSV_Pacientes
+    IF OBJECT_ID('CargarDatosDesdeCSV_Pacientes') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Pacientes.'
+    ELSE
+        PRINT 'Procedure CargarDatosDesdeCSV_Pacientes eliminada correctamente.'
+END
 GO
 CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Pacientes
 AS
@@ -315,7 +432,15 @@ BEGIN
 END
 go
 
-
+IF OBJECT_ID('CargarDatosDesdeCSV_Medicos') IS NOT NULL
+BEGIN
+    DROP PROCEDURE CargarDatosDesdeCSV_Medicos
+    IF OBJECT_ID('CargarDatosDesdeCSV_Medicos') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Medicos.'
+    ELSE
+        PRINT 'Procedure CargarDatosDesdeCSV_Medicos eliminada correctamente.'
+END
+GO
 CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Medicos
 AS
 BEGIN
@@ -362,7 +487,15 @@ BEGIN
 END 
 go
 
-		
+IF OBJECT_ID('CargarDatosDesdeCSV_Sedes') IS NOT NULL
+BEGIN
+    DROP PROCEDURE CargarDatosDesdeCSV_Sedes
+    IF OBJECT_ID('CargarDatosDesdeCSV_Sedes') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Sedes.'
+    ELSE
+        PRINT 'Procedure CargarDatosDesdeCSV_Sedes eliminada correctamente.'
+END
+GO
 CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Sedes
 AS
 BEGIN
@@ -399,6 +532,15 @@ BEGIN
 END 
 go
 
+IF OBJECT_ID('CargarDatosDesdeCSV_Prestadores') IS NOT NULL
+BEGIN
+    DROP PROCEDURE CargarDatosDesdeCSV_Prestadores
+    IF OBJECT_ID('CargarDatosDesdeCSV_Prestadores') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Prestadores.'
+    ELSE
+        PRINT 'Procedure CargarDatosDesdeCSV_Prestadores eliminada correctamente.'
+END
+GO
 CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Prestadores
 AS
 BEGIN
@@ -436,46 +578,63 @@ go
 -- Importar contenido del archivo JSON a nuestra tabla datosAtencion.Centro_Autorizaciones
 
 -- Vaciamos la tabla
+IF OBJECT_ID('CargarDatosDesdeJSON') IS NOT NULL
+BEGIN
+    DROP PROCEDURE CargarDatosDesdeJSON
+    IF OBJECT_ID('CargarDatosDesdeJSON') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeJSON.'
+    ELSE
+        PRINT 'Procedure CargarDatosDesdeJSON eliminada correctamente.'
+END
+GO
 CREATE OR ALTER PROCEDURE CargarDatosDesdeJSON
 AS
 BEGIN
-DELETE FROM datosAtencion.Centro_Autorizaciones
+	DELETE FROM datosAtencion.Centro_Autorizaciones
 
--- Guardamos nuestro json en una variable
-DECLARE @jsonEstudiosClinicos NVARCHAR(MAX);
-SET @jsonEstudiosClinicos = (
-    SELECT * 
-    FROM OPENROWSET (BULK 'C:\importar\Centro_Autorizaciones.Estudios clinicos.json', SINGLE_CLOB) as JsonFile
-)
--- Insertar los resultados de la consulta en la tabla creada
-INSERT INTO datosAtencion.Centro_Autorizaciones (Area, Estudio, Prestador, Programa, [Porcentaje Cobertura], Costo, [Requiere autorizacion])
-SELECT 
-    Area,
-    Estudio,
-    Prestador,
-    Programa,
-    [Porcentaje Cobertura],
-    Costo,
-    CASE 
-        WHEN [Requiere autorizacion] = 1 THEN 'True'
-        ELSE 'False'
-    END AS [Requiere autorizacion]
-FROM OPENJSON(@jsonEstudiosClinicos)
-WITH(
-    Area varchar(30) '$.Area',
-    Estudio varchar(30) '$.Estudio',
-    Prestador varchar(30) '$.Prestador',
-    Programa varchar(50) '$.Plan',
-    [Porcentaje Cobertura] int '$."Porcentaje Cobertura"',
-    Costo money '$.Costo',
-    [Requiere autorizacion] bit '$."Requiere autorizacion"'
-);
+	-- Guardamos nuestro json en una variable
+	DECLARE @jsonEstudiosClinicos NVARCHAR(MAX);
+	SET @jsonEstudiosClinicos = (
+		SELECT * 
+		FROM OPENROWSET (BULK 'C:\importar\Centro_Autorizaciones.Estudios clinicos.json', SINGLE_CLOB) as JsonFile
+	)
+	-- Insertar los resultados de la consulta en la tabla creada
+	INSERT INTO datosAtencion.Centro_Autorizaciones (Area, Estudio, Prestador, Programa, [Porcentaje Cobertura], Costo, [Requiere autorizacion])
+	SELECT 
+		Area,
+		Estudio,
+		Prestador,
+		Programa,
+		[Porcentaje Cobertura],
+		Costo,
+		CASE 
+			WHEN [Requiere autorizacion] = 1 THEN 'True'
+			ELSE 'False'
+		END AS [Requiere autorizacion]
+	FROM OPENJSON(@jsonEstudiosClinicos)
+	WITH(
+		Area varchar(30) '$.Area',
+		Estudio varchar(30) '$.Estudio',
+		Prestador varchar(30) '$.Prestador',
+		Programa varchar(50) '$.Plan',
+		[Porcentaje Cobertura] int '$."Porcentaje Cobertura"',
+		Costo money '$.Costo',
+		[Requiere autorizacion] bit '$."Requiere autorizacion"'
+	);
 END
-
+GO
 --select * from datosAtencion.Centro_Autorizaciones
 
 -----------------------------------------------------------------------------------
 -- Generar archivo XML detallando los turnos atendidos para informar a la Obra Social
+IF OBJECT_ID('GenerarInformeTurnos') IS NOT NULL
+BEGIN
+    DROP PROCEDURE GenerarInformeTurnos
+    IF OBJECT_ID('GenerarInformeTurnos') IS NOT NULL
+        PRINT 'Ocurrió un error al intentar eliminar el procedure GenerarInformeTurnos.'
+    ELSE
+        PRINT 'Procedure GenerarInformeTurnos eliminada correctamente.'
+END
 GO
 CREATE OR ALTER PROCEDURE GenerarInformeTurnos(
     @NombreObraSocial NVARCHAR(255),
