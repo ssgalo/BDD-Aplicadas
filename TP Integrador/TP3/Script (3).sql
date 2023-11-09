@@ -52,7 +52,7 @@ El usuario web se define utilizando el DNI
 
 
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
-CREATE DATABASE ClinicaCureSA_TP3
+CREATE DATABASE ClinicaCureSA_TP3 COLLATE Modern_Spanish_CI_AI;
 GO
 
 USE ClinicaCureSA_TP3
