@@ -44,7 +44,7 @@ especialidad. Los parámetros de entrada son el nombre de la obra social y un in
 -- drop database ClinicaCureSA_TP4
 
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
-create database ClinicaCureSA_TP4
+create database ClinicaCureSA_TP4 COLLATE Modern_Spanish_CI_AI;
 go
 use ClinicaCureSA_TP4
 
