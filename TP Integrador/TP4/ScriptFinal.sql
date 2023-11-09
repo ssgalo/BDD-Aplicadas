@@ -61,7 +61,7 @@ IF OBJECT_ID('datosPaciente.Usuario') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Usuario
     IF OBJECT_ID('datosPaciente.Usuario') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Usuario.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Usuario', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Usuario eliminada correctamente.'
 END
@@ -79,7 +79,7 @@ IF OBJECT_ID('datosPaciente.Domicilio') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Domicilio
     IF OBJECT_ID('datosPaciente.Domicilio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Domicilio.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Domicilio.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Domicilio eliminada correctamente.'
 END
@@ -102,7 +102,7 @@ IF OBJECT_ID('datosPaciente.Prestador') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Prestador
     IF OBJECT_ID('datosPaciente.Prestador') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Prestador.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Prestador.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Prestador eliminada correctamente.'
 END
@@ -120,7 +120,7 @@ IF OBJECT_ID('datosPaciente.Cobertura') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Cobertura
     IF OBJECT_ID('datosPaciente.Cobertura') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Cobertura.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Cobertura.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Cobertura eliminada correctamente.'
 END
@@ -141,7 +141,7 @@ IF OBJECT_ID('datosPaciente.Estudio') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Estudio
     IF OBJECT_ID('datosPaciente.Estudio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Estudio.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Estudio.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Estudio eliminada correctamente.'
 END
@@ -162,7 +162,7 @@ IF OBJECT_ID('datosPaciente.Paciente') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Paciente
     IF OBJECT_ID('datosPaciente.Paciente') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Paciente.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Paciente.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Paciente eliminada correctamente.'
 END
@@ -202,7 +202,7 @@ IF OBJECT_ID('datosReserva.EstadoTurno') IS NOT NULL
 BEGIN
     DROP TABLE datosReserva.EstadoTurno
     IF OBJECT_ID('datosReserva.EstadoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.EstadoTurno.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosReserva.EstadoTurno.', 16, 1);
     ELSE
         PRINT 'Tabla datosReserva.EstadoTurno eliminada correctamente.'
 END
@@ -219,7 +219,7 @@ IF OBJECT_ID('datosAtencion.Especialidad') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.Especialidad
     IF OBJECT_ID('datosAtencion.Especialidad') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Especialidad.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.Especialidad.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.Especialidad eliminada correctamente.'
 END
@@ -235,7 +235,7 @@ IF OBJECT_ID('datosAtencion.SedeAtencion') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.SedeAtencion
     IF OBJECT_ID('datosAtencion.SedeAtencion') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.SedeAtencion.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.SedeAtencion.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.SedeAtencion eliminada correctamente.'
 END
@@ -253,7 +253,7 @@ IF OBJECT_ID('datosAtencion.Medico') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.Medico
     IF OBJECT_ID('datosAtencion.Medico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Medico.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.Medico.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.Medico eliminada correctamente.'
 END
@@ -275,7 +275,7 @@ IF OBJECT_ID('datosReserva.Reserva') IS NOT NULL
 BEGIN
     DROP TABLE datosReserva.Reserva
     IF OBJECT_ID('datosReserva.Reserva') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.Reserva.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosReserva.Reserva.', 16, 1);
     ELSE
         PRINT 'Tabla datosReserva.Reserva eliminada correctamente.'
 END
@@ -304,7 +304,7 @@ IF OBJECT_ID('datosAtencion.Centro_Autorizaciones') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.Centro_Autorizaciones
     IF OBJECT_ID('datosAtencion.Centro_Autorizaciones') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Centro_Autorizaciones.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.Centro_Autorizaciones.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.Centro_Autorizaciones eliminada correctamente.'
 END
@@ -341,7 +341,7 @@ IF OBJECT_ID('CargarDatosDesdeCSV_Pacientes') IS NOT NULL
 BEGIN
     DROP PROCEDURE CargarDatosDesdeCSV_Pacientes
     IF OBJECT_ID('CargarDatosDesdeCSV_Pacientes') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Pacientes.'
+	RAISERROR('Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Pacientes.', 16, 1);
     ELSE
         PRINT 'Procedure CargarDatosDesdeCSV_Pacientes eliminada correctamente.'
 END
@@ -436,7 +436,7 @@ IF OBJECT_ID('CargarDatosDesdeCSV_Medicos') IS NOT NULL
 BEGIN
     DROP PROCEDURE CargarDatosDesdeCSV_Medicos
     IF OBJECT_ID('CargarDatosDesdeCSV_Medicos') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Medicos.'
+	RAISERROR('Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Medicos.', 16, 1);
     ELSE
         PRINT 'Procedure CargarDatosDesdeCSV_Medicos eliminada correctamente.'
 END
@@ -491,7 +491,7 @@ IF OBJECT_ID('CargarDatosDesdeCSV_Sedes') IS NOT NULL
 BEGIN
     DROP PROCEDURE CargarDatosDesdeCSV_Sedes
     IF OBJECT_ID('CargarDatosDesdeCSV_Sedes') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Sedes.'
+	RAISERROR('Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Sedes.', 16, 1);
     ELSE
         PRINT 'Procedure CargarDatosDesdeCSV_Sedes eliminada correctamente.'
 END
@@ -536,7 +536,7 @@ IF OBJECT_ID('CargarDatosDesdeCSV_Prestadores') IS NOT NULL
 BEGIN
     DROP PROCEDURE CargarDatosDesdeCSV_Prestadores
     IF OBJECT_ID('CargarDatosDesdeCSV_Prestadores') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Prestadores.'
+	RAISERROR('Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeCSV_Prestadores.', 16, 1);
     ELSE
         PRINT 'Procedure CargarDatosDesdeCSV_Prestadores eliminada correctamente.'
 END
@@ -582,7 +582,7 @@ IF OBJECT_ID('CargarDatosDesdeJSON') IS NOT NULL
 BEGIN
     DROP PROCEDURE CargarDatosDesdeJSON
     IF OBJECT_ID('CargarDatosDesdeJSON') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeJSON.'
+	RAISERROR('Ocurrió un error al intentar eliminar el procedure CargarDatosDesdeJSON.', 16, 1);
     ELSE
         PRINT 'Procedure CargarDatosDesdeJSON eliminada correctamente.'
 END
@@ -631,7 +631,7 @@ IF OBJECT_ID('GenerarInformeTurnos') IS NOT NULL
 BEGIN
     DROP PROCEDURE GenerarInformeTurnos
     IF OBJECT_ID('GenerarInformeTurnos') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure GenerarInformeTurnos.'
+	RAISERROR('Ocurrió un error al intentar eliminar el procedure GenerarInformeTurnos.', 16, 1);
     ELSE
         PRINT 'Procedure GenerarInformeTurnos eliminada correctamente.'
 END
