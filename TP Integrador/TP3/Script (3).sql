@@ -48,14 +48,14 @@ El usuario web se define utilizando el DNI
 */
 ---- FIN DATOS ENTREGA ----
 
--- drop database ClinicaCureSA_TP3
+-- drop database CURESA
 
 
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
-CREATE DATABASE ClinicaCureSA_TP3 COLLATE Modern_Spanish_CI_AI;
+CREATE DATABASE CURESA COLLATE Modern_Spanish_CI_AI;
 GO
 
-USE ClinicaCureSA_TP3
+USE CURESA
 GO
 
 CREATE SCHEMA datosPaciente
