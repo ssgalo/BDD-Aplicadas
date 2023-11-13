@@ -41,12 +41,12 @@ especialidad. Los parámetros de entrada son el nombre de la obra social y un in
 -- ACLARACIÓN: El siguiente TP N4 tiene también el código de creación de tablas y esquemas al igual que el TP N3.
 -- Sin embargo, tiene algunas modificaciones en las constraints y primary keys para que la importación de los datos pueda hacerse correctamente.
 
--- drop database ClinicaCureSA_TP4
+-- drop database CURESA
 
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
-create database ClinicaCureSA_TP4 COLLATE Modern_Spanish_CI_AI;
+create database CURESA COLLATE Modern_Spanish_CI_AI;
 go
-use ClinicaCureSA_TP4
+use CURESA
 
 GO
 CREATE SCHEMA datosPaciente
