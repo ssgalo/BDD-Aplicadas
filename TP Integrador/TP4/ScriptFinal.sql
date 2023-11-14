@@ -456,7 +456,7 @@ BEGIN
 	SELECT 
 	DISTINCT(Especialidad) 
 	FROM #tempTable T
-	WHERE NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE nombre = COLLATE Modern_Spanish_CI_AI = T.Especialidad COLLATE Modern_Spanish_CI_AI);
+	WHERE NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE nombre COLLATE Modern_Spanish_CI_AI = T.Especialidad COLLATE Modern_Spanish_CI_AI);
 
 	-- Realizar transformación de datos y luego insertar en la tabla de destino
 	INSERT INTO datosAtencion.Medico(nombre, apellido, idEspecialidad, nroMatricula)
