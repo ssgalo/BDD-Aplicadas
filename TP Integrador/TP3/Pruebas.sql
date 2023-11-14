@@ -1,24 +1,24 @@
-USE ClinicaCureSA_TP3
+USE CURESA
 
 -------------------------------------- TABLA USUARIO --------------------------------------
 -- Caso de prueba: Insertar un nuevo usuario
-EXEC datosPaciente.InsertarUsuario @contraseña = 'Password'
-SELECT * FROM datosPaciente.Usuario WHERE contraseña = 'Password'
+EXEC datosPaciente.InsertarUsuario @contraseÃ±a = 'Password'
+SELECT * FROM datosPaciente.Usuario WHERE contraseÃ±a = 'Password'
 
--- Caso de prueba: Modificar la contraseña de un usuario existente
-EXEC datosPaciente.InsertarUsuario @contraseña = 'Password'
+-- Caso de prueba: Modificar la contraseÃ±a de un usuario existente
+EXEC datosPaciente.InsertarUsuario @contraseÃ±a = 'Password'
 
 DECLARE @idUsuario INT
-SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseña = 'Password'
-EXEC datosPaciente.ModificarUsuario @id = @idUsuario, @nuevaContraseña = 'NewPassword'
+SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseÃ±a = 'Password'
+EXEC datosPaciente.ModificarUsuario @id = @idUsuario, @nuevaContraseÃ±a = 'NewPassword'
 
 SELECT * FROM datosPaciente.Usuario WHERE id = @idUsuario
 
 -- Caso de prueba: Eliminar un usuario existente
-EXEC datosPaciente.InsertarUsuario @contraseña = 'Password'
+EXEC datosPaciente.InsertarUsuario @contraseÃ±a = 'Password'
 
 DECLARE @idUsuario INT
-SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseña = 'Password'
+SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseÃ±a = 'Password'
 EXEC datosPaciente.EliminarUsuario @id = @idUsuario
 
 SELECT * FROM datosPaciente.Usuario WHERE id = @idUsuario
@@ -27,8 +27,8 @@ SELECT * FROM datosPaciente.Usuario WHERE id = @idUsuario
 -------------------------------------- TABLA PACIENTE --------------------------------------
 EXEC datosPaciente.InserPaciente
     @nombre = 'Juan',
-    @apellido = 'Pérez',
-    @apellidoMaterno = 'González',
+    @apellido = 'PÃ©rez',
+    @apellidoMaterno = 'GonzÃ¡lez',
     @fechaNacimiento = '1990-05-15',
     @tipoDocumento = 'DNI',
     @nroDocumento = 12345678,
@@ -76,7 +76,7 @@ EXEC datosPaciente.InsertarDomicilio
 	@piso = 5,
 	@departamento = 'A',
 	@codigoPostal = '12345',
-	@pais = 'País Ejemplo',
+	@pais = 'PaÃ­s Ejemplo',
 	@provincia = 'Provincia Ejemplo',
 	@localidad = 'Localidad Ejemplo'
 
@@ -207,18 +207,18 @@ SELECT * FROM datosPaciente.Prestador WHERE id = @idPrestador
 -- Llamamos al procedimiento para insertar un estudio de ejemplo
 EXEC datosPaciente.InsertarEstudio
     @fecha = '2023-11-15',
-    @nombre = 'Análisis de sangre',
+    @nombre = 'AnÃ¡lisis de sangre',
     @autorizado = 1,
     @linkDocumentoResultado = 'https://example.com/resultadodocumento.pdf',
     @imagenResultado = 'resultadoimagen.jpg';
 
-SELECT * FROM datosPaciente.Estudio WHERE nombre = 'Análisis de sangre';
+SELECT * FROM datosPaciente.Estudio WHERE nombre = 'AnÃ¡lisis de sangre';
 
 -- Supongamos que ya existe un estudio con ID 1 y queremos modificar sus datos
 EXEC datosPaciente.ModificarEstudio
     @id = 1,
     @fecha = '2023-12-20',
-    @nombre = 'Radiografía de tórax',
+    @nombre = 'RadiografÃ­a de tÃ³rax',
     @autorizado = 0,
     @linkDocumentoResultado = 'https://example.com/nuevoresultado.pdf',
     @imagenResultado = 'nuevaimagen.jpg';
@@ -307,13 +307,13 @@ EXEC datosReserva.EliminarTipoTurno @id = @TipoTurnoID
 SELECT * FROM datosReserva.TipoTurno WHERE id = @TipoTurnoID
 
 -------------------------------------- TABLA DIAS X SEDE --------------------------------------
--- Caso de prueba: Insertar un nuevo horario de médico
+-- Caso de prueba: Insertar un nuevo horario de mÃ©dico
 EXEC datosAtencion.InsertarSede
     @nombreSede = 'Sede Prueba 1',
     @direccionSede = 'Calle de la Prueba, 123'
 
 EXEC datosAtencion.InsertarMedico
-    @nombre = 'Médico de Prueba',
+    @nombre = 'MÃ©dico de Prueba',
     @apellido = 'Apellido Prueba',
     @nroMatricula = 12345,
     @idEspecialidad = 1  --TIENE QUE EXISTIR LA ESPECIALIDAD!!
@@ -322,7 +322,7 @@ DECLARE @SedeID INT
 SELECT @SedeID = id FROM datosAtencion.SedeAtencion WHERE nombre = 'Sede Prueba 1'
 
 DECLARE @MedicoID INT
-SELECT @MedicoID = id FROM datosAtencion.Medico WHERE nombre = 'Médico de Prueba'
+SELECT @MedicoID = id FROM datosAtencion.Medico WHERE nombre = 'MÃ©dico de Prueba'
 
 EXEC datosAtencion.InsertarHorarioMedico
     @idSede = @SedeID,
@@ -333,20 +333,20 @@ EXEC datosAtencion.InsertarHorarioMedico
 
 SELECT * FROM datosAtencion.DiasXSede WHERE idSede = @SedeID AND idMedico = @MedicoID AND diaSemana = 'Lunes'
 
--- Caso de prueba: Modificar un horario de médico existente
+-- Caso de prueba: Modificar un horario de mÃ©dico existente
 EXEC datosAtencion.InsertarSede
     @nombreSede = 'Sede Prueba 2',
     @direccionSede = 'Calle de la Prueba, 456'
 
 EXEC datosAtencion.InsertarMedico
-    @nombre = 'Médico de Prueba 2',
+    @nombre = 'MÃ©dico de Prueba 2',
     @apellido = 'Apellido Prueba',
     @nroMatricula = 54321,
     @idEspecialidad = 2 --TIENE QUE EXISTIR LA ESPECIALIDAD!!
 
 EXEC datosAtencion.InsertarHorarioMedico
-    @idSede = 1,  -- Asegúrate de que la sede de prueba exista
-    @idMedico = 1,  -- Asegúrate de que el médico de prueba exista
+    @idSede = 1,  -- AsegÃºrate de que la sede de prueba exista
+    @idMedico = 1,  -- AsegÃºrate de que el mÃ©dico de prueba exista
     @diaSemana = 'Martes',
     @horaInicio = '10:00:00',
     @horaFin = '16:00:00'
@@ -355,7 +355,7 @@ DECLARE @SedeID INT
 SELECT @SedeID = id FROM datosAtencion.SedeAtencion WHERE nombre = 'Sede Prueba 2'
 
 DECLARE @MedicoID INT
-SELECT @MedicoID = id FROM datosAtencion.Medico WHERE nombre = 'Médico de Prueba 2'
+SELECT @MedicoID = id FROM datosAtencion.Medico WHERE nombre = 'MÃ©dico de Prueba 2'
 
 EXEC datosAtencion.ModificarHorarioMedico
     @idSede = @SedeID,
@@ -366,31 +366,31 @@ EXEC datosAtencion.ModificarHorarioMedico
 
 SELECT * FROM datosAtencion.DiasXSede WHERE idSede = @SedeID AND idMedico = @MedicoID AND diaSemana = 'Martes'
 
--- Caso de prueba: Eliminar un horario de médico
+-- Caso de prueba: Eliminar un horario de mÃ©dico
 DECLARE @SedeID INT
 SELECT @SedeID = id FROM datosAtencion.SedeAtencion WHERE nombre = 'Sede Prueba 2'
 
--- Paso 5: Obtener el ID del médico insertado
+-- Paso 5: Obtener el ID del mÃ©dico insertado
 DECLARE @MedicoID INT
-SELECT @MedicoID = id FROM datosAtencion.Medico WHERE nombre = 'Médico de Prueba 2'
+SELECT @MedicoID = id FROM datosAtencion.Medico WHERE nombre = 'MÃ©dico de Prueba 2'
 
--- Paso 6: Ejecutar el SP para eliminar el horario de médico
+-- Paso 6: Ejecutar el SP para eliminar el horario de mÃ©dico
 EXEC datosAtencion.EliminarHorarioMedico
     @idSede = @SedeID,
     @idMedico = @MedicoID,
     @diaSemana = 'Martes'
 
-SELECT * FROM datosAtencion.DiasXSede WHERE idSede = @SedeID AND idMedico = @MedicoID AND diaSemana = 'Miércoles'
+SELECT * FROM datosAtencion.DiasXSede WHERE idSede = @SedeID AND idMedico = @MedicoID AND diaSemana = 'MiÃ©rcoles'
 
--------------------------------------- TABLA SEDE DE ATENCIÓN --------------------------------------
--- Caso de prueba: Insertar una nueva sede de atención
+-------------------------------------- TABLA SEDE DE ATENCIÃ“N --------------------------------------
+-- Caso de prueba: Insertar una nueva sede de atenciÃ³n
 EXEC datosAtencion.InsertarSede
     @nombreSede = 'Sede Prueba 1',
     @direccionSede = 'F. Varela 123'
 
 SELECT * FROM datosAtencion.SedeAtencion WHERE nombre = 'Sede Prueba 1'
 
--- Caso de prueba: Modificar una sede de atención existente
+-- Caso de prueba: Modificar una sede de atenciÃ³n existente
 EXEC datosAtencion.InsertarSede
     @nombreSede = 'Sede Prueba 2',
     @direccionSede = 'F. Varela 456'
@@ -405,7 +405,7 @@ EXEC datosAtencion.ModificarSede
 
 SELECT * FROM datosAtencion.SedeAtencion WHERE id = @SedeID
 
--- Caso de prueba: Eliminar una sede de atención
+-- Caso de prueba: Eliminar una sede de atenciÃ³n
 EXEC datosAtencion.InsertarSede
     @nombreSede = 'Sede Prueba 3',
     @direccionSede = 'Calle de la Prueba, 111'
@@ -420,16 +420,16 @@ SELECT * FROM datosAtencion.SedeAtencion WHERE id = @SedeID
 
 
 -------------------------------------- TABLA MEDICO --------------------------------------
--- Llamamos al procedimiento para insertar un médico de ejemplo
+-- Llamamos al procedimiento para insertar un mÃ©dico de ejemplo
 EXEC datosAtencion.InsertarMedico
     @nombre = 'Juan',
-    @apellido = 'Pérez',
+    @apellido = 'PÃ©rez',
     @nroMatricula = 12345,
     @idEspecialidad = 1;
 
 SELECT * FROM datosAtencion.Medico WHERE nroMatricula = 12345;
 
--- Supongamos que ya existe un médico con ID 1 y queremos modificar sus datos
+-- Supongamos que ya existe un mÃ©dico con ID 1 y queremos modificar sus datos
 EXEC datosAtencion.ModifMedico
     @id = 1,
     @nombre = 'NuevoNombre',
@@ -439,7 +439,7 @@ EXEC datosAtencion.ModifMedico
 
 SELECT * FROM datosAtencion.Medico WHERE id = 1;
 
--- Supongamos que queremos eliminar al médico con ID 3
+-- Supongamos que queremos eliminar al mÃ©dico con ID 3
 EXEC datosAtencion.EliminarMedico @id = 3;
 
 SELECT * FROM datosAtencion.Medico WHERE id = 3;
@@ -447,29 +447,29 @@ SELECT * FROM datosAtencion.Medico WHERE id = 3;
 -------------------------------------- TABLA ESPECIALIDAD --------------------------------------
 -- Caso de prueba: Insertar una nueva especialidad
 EXEC datosAtencion.InsertarEspecialidad
-    @nombreEspecialidad = 'Cardiología'
+    @nombreEspecialidad = 'CardiologÃ­a'
 
-SELECT * FROM datosAtencion.Especialidad WHERE nombre = 'Cardiología'
+SELECT * FROM datosAtencion.Especialidad WHERE nombre = 'CardiologÃ­a'
 
 -- Caso de prueba: Modificar una especialidad existente
 EXEC datosAtencion.InsertarEspecialidad
-    @nombreEspecialidad = 'Oftalmología'
+    @nombreEspecialidad = 'OftalmologÃ­a'
 
 DECLARE @idEspecialidad INT
-SELECT @idEspecialidad = id FROM datosAtencion.Especialidad WHERE nombre = 'Oftalmología'
+SELECT @idEspecialidad = id FROM datosAtencion.Especialidad WHERE nombre = 'OftalmologÃ­a'
 
 EXEC datosAtencion.ModificarEspecialidad
     @idEspecialidad = @idEspecialidad,
-    @NuevoNombre = 'Nueva Oftalmología'
+    @NuevoNombre = 'Nueva OftalmologÃ­a'
 
 SELECT * FROM datosAtencion.Especialidad WHERE id = @idEspecialidad
 
 -- Caso de prueba: Eliminar una especialidad
 EXEC datosAtencion.InsertarEspecialidad
-    @nombreEspecialidad = 'Dermatología'
+    @nombreEspecialidad = 'DermatologÃ­a'
 
 DECLARE @idEspecialidad INT
-SELECT @idEspecialidad = id FROM datosAtencion.Especialidad WHERE nombre = 'Dermatología'
+SELECT @idEspecialidad = id FROM datosAtencion.Especialidad WHERE nombre = 'DermatologÃ­a'
 
 EXEC datosAtencion.EliminarEspecialidad
     @idEspecialidad = @idEspecialidad
