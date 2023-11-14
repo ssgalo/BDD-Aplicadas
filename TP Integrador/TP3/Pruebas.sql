@@ -66,7 +66,11 @@ EXEC datosPaciente.ModificarCobertura
 SELECT * FROM datosPaciente.Cobertura 
 
 -------------------------------------- TABLA PRESTADOR --------------------------------------
-
+-- Caso de prueba: Insertar prestador con datos invalidos
+EXEC datosPaciente.InsertarPrestador
+    @nombre = '',
+    @tipoPlan = ''
+    
 -- Caso de prueba: Eliminar un prestador existente
 EXEC datosPaciente.InsertarPrestador
     @nombre = 'Prestador E2',
