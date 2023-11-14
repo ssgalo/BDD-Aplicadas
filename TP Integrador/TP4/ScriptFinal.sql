@@ -456,7 +456,7 @@ BEGIN
 	SELECT 
 	DISTINCT(Especialidad) 
 	FROM #tempTable T
-	WHERE NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE nombre = T.Especialidad);
+	WHERE NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE nombre = COLLATE Modern_Spanish_CI_AI = T.Especialidad COLLATE Modern_Spanish_CI_AI);
 
 	-- Realizar transformación de datos y luego insertar en la tabla de destino
 	INSERT INTO datosAtencion.Medico(nombre, apellido, idEspecialidad, nroMatricula)
@@ -490,10 +490,10 @@ BEGIN
 	-- Crear una tabla temporal con la misma estructura que el archivo CSV
 	CREATE TABLE #TempTable
 	(
-		nombre NVARCHAR(30) NOT NULL,
-		direccion NVARCHAR(30) NOT NULL,
-		localidad NVARCHAR(30),
-		provincia NVARCHAR(30),
+		nombre NVARCHAR(30) COLLATE Modern_Spanish_CI_AI NOT NULL,
+		direccion NVARCHAR(30) COLLATE Modern_Spanish_CI_AI NOT NULL,
+		localidad NVARCHAR(30) COLLATE Modern_Spanish_CI_AI,
+		provincia NVARCHAR(30) COLLATE Modern_Spanish_CI_AI
 	);
 
 	-- Cargar datos desde el archivo CSV en la tabla temporal
@@ -505,6 +505,7 @@ BEGIN
 		FIRSTROW = 2
 		--,ERRORFILE = 'C:\Dataset\ErroresSedes.csv'
 	);
+
 	-- Realizar transformación de datos y luego insertar en la tabla datosAtencion.SedeAtencion solo si no existen registros con el mismo nombre y dirección
 	INSERT INTO datosAtencion.SedeAtencion(nombre, direccion, fechaBorrado)
 	SELECT 
@@ -515,13 +516,13 @@ BEGIN
 	WHERE NOT EXISTS (
 	        SELECT 1 
 	        FROM datosAtencion.SedeAtencion 
-	        WHERE nombre = T.nombre AND direccion = T.direccion
+	        WHERE nombre COLLATE Modern_Spanish_CI_AI = T.nombre AND direccion COLLATE Modern_Spanish_CI_AI = T.direccion
    	);
 
 	-- Eliminar la tabla temporal después de su uso 
 	DROP TABLE #TempTable;
 END 
-go
+GO
 
 IF OBJECT_ID('CargarDatosDesdeCSV_Prestadores') IS NOT NULL
 BEGIN
@@ -538,8 +539,8 @@ BEGIN
 	-- Crear una tabla temporal con la misma estructura que el archivo CSV
 	CREATE TABLE #TempTable
 	(
-		nombre NVARCHAR(40) NOT NULL,
-		tipoPlan NVARCHAR(40) NOT NULL
+		nombre NVARCHAR(40) COLLATE Modern_Spanish_CI_AI NOT NULL,
+		tipoPlan NVARCHAR(40) COLLATE Modern_Spanish_CI_AI NOT NULL
 	);
 
 	-- Cargar datos desde el archivo CSV en la tabla temporal
@@ -555,19 +556,19 @@ BEGIN
 	INSERT INTO datosPaciente.Prestador(nombre, tipoPlan, fechaBorrado)
 	SELECT 
 		CAST(T.nombre AS NVARCHAR(30)),  
-		CAST(REPLACE(T.tipoPlan, ';;', '') AS NVARCHAR(30)),
+		CAST(REPLACE(T.tipoPlan, ';;', '') AS NVARCHAR(30)) COLLATE Modern_Spanish_CI_AI,
 		NULL
 	FROM #TempTable T 
 	WHERE NOT EXISTS (
 	        SELECT 1 
 	        FROM datosPaciente.Prestador 
-	        WHERE nombre = T.nombre AND tipoPlan = REPLACE(T.tipoPlan, ';;', '')
+	        WHERE nombre COLLATE Modern_Spanish_CI_AI = T.nombre AND tipoPlan COLLATE Modern_Spanish_CI_AI = REPLACE(T.tipoPlan, ';;', '')
     	);
 
 	-- Eliminar la tabla temporal después de su uso 
-	DROP TABLE #TempTable;	--	lo comente para poder ver como se guardaban, despues descomentar
+	DROP TABLE #TempTable;
 END 
-go
+GO
 
 -----------------------------------------------------------------------------------
 -- Importar contenido del archivo JSON a nuestra tabla datosAtencion.Centro_Autorizaciones
