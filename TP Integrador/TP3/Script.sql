@@ -248,8 +248,7 @@ IF OBJECT_ID('datosReserva.TipoTurno') IS NOT NULL
 BEGIN
     DROP TABLE datosReserva.TipoTurno
     IF OBJECT_ID('datosReserva.TipoTurno') IS NOT NULL
-		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Prestador.', 16, 1);
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.TipoTurno.'
+	RAISERROR('Ocurrió un error al intentar eliminar la tabla datosReserva.TipoTurno.', 16, 1);
     ELSE
         PRINT 'Tabla datosReserva.TipoTurno eliminada correctamente.'
 END
