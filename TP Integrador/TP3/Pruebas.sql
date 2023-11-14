@@ -6,116 +6,33 @@ EXEC datosPaciente.InsertarUsuario @contraseña = 'Password'
 SELECT * FROM datosPaciente.Usuario WHERE contraseña = 'Password'
 
 -- Caso de prueba: Modificar la contraseña de un usuario existente
-EXEC datosPaciente.InsertarUsuario @contraseña = 'Password'
+EXEC datosPaciente.InsertarUsuario @contraseña = 'Password123'
 
 DECLARE @idUsuario INT
-SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseña = 'Password'
+SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseña = 'Password123'
 EXEC datosPaciente.ModificarUsuario @id = @idUsuario, @nuevaContraseña = 'NewPassword'
 
 SELECT * FROM datosPaciente.Usuario WHERE id = @idUsuario
 
 -- Caso de prueba: Eliminar un usuario existente
-EXEC datosPaciente.InsertarUsuario @contraseña = 'Password'
+EXEC datosPaciente.InsertarUsuario @contraseña = 'Password124'
 
 DECLARE @idUsuario INT
-SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseña = 'Password'
+SELECT @idUsuario = id FROM datosPaciente.Usuario WHERE contraseña = 'Password124'
 EXEC datosPaciente.EliminarUsuario @id = @idUsuario
 
 SELECT * FROM datosPaciente.Usuario WHERE id = @idUsuario
 
-
--------------------------------------- TABLA PACIENTE --------------------------------------
-EXEC datosPaciente.InserPaciente
-    @nombre = 'Juan',
-    @apellido = 'Pérez',
-    @apellidoMaterno = 'González',
-    @fechaNacimiento = '1990-05-15',
-    @tipoDocumento = 'DNI',
-    @nroDocumento = 12345678,
-    @sexo = 'M',
-    @genero = 'Masculino',
-    @nacionalidad = 'Argentino',
-    @fotoPerfil = 'ruta_foto.jpg',
-    @mail = 'juan.perez@email.com',
-    @telefonoFijo = '123456789',
-    @fechaRegistro = '2023-10-15',
-    @idUsuario = 1,
-    @idEstudio = 1;
-
-SELECT * FROM datosPaciente.Paciente WHERE nroDocumento = 12345678;
-
--- Supongamos que ya existe un paciente con ID 1 y queremos modificar sus datos
-EXEC datosPaciente.ModifPaciente
-    @id = 1,
-    @nombre = 'NuevoNombre',
-    @apellido = 'NuevoApellido',
-    @apellidoMaterno = 'NuevoApellidoMaterno',
-    @fechaNacimiento = '1995-08-20',
-    @tipoDocumento = 'Pasaporte',
-    @nroDocumento = 98765432,
-    @sexo = 'F',
-    @genero = 'Femenino',
-    @nacionalidad = 'Chileno',
-    @fotoPerfil = 'nueva_foto.jpg',
-    @mail = 'nuevo.email@email.com',
-    @telefonoFijo = '987654321',
-    @idUsuarioActualizacion = 2,
-    @idEstudio = 2;
-
-SELECT * FROM datosPaciente.Paciente WHERE idHistoriaClinica = 1;
-
--- Supongamos que queremos eliminar al paciente con ID 2
-EXEC datosPaciente.ElimPaciente @idHistoriaClinica = 2;
-
-SELECT * FROM datosPaciente.Paciente WHERE idHistoriaClinica = 2;
-
--------------------------------------- TABLA DOMICILIO --------------------------------------
--- Caso de prueba: Insertar un nuevo domicilio
-EXEC datosPaciente.InsertarDomicilio
-	@calleYNro = 'Calle 123',
-	@piso = 5,
-	@departamento = 'A',
-	@codigoPostal = '12345',
-	@pais = 'País Ejemplo',
-	@provincia = 'Provincia Ejemplo',
-	@localidad = 'Localidad Ejemplo'
-
-SELECT * FROM datosPaciente.Domicilio WHERE calleYNro = 'Calle 123'
-
--- Caso de prueba: Modificar un domicilio existente
-EXEC datosPaciente.InsertarDomicilio
-	@calleYNro = 'Chavez 123',
-	@piso = 5,
-	@departamento = 'A',
-	@codigoPostal = '12345',
-	@pais = 'Argentina',
-	@provincia = 'Misiones',
-	@localidad = 'Andresito'
-
-DECLARE @idDomicilio INT
-SELECT @idDomicilio = id FROM datosPaciente.Domicilio WHERE calleYNro = 'Calle 123'
-EXEC datosPaciente.ModificarDomi
-	@id = @idDomicilio,
-	@nuevaCalleYNro = 'Florencio Varela 456',
-	@nuevoPiso = 7
-
-SELECT * FROM datosPaciente.Domicilio WHERE id = @idDomicilio
-
--- Caso de prueba: Eliminar un domicilio existente
-DECLARE @idDomicilio INT
-SELECT @idDomicilio = id FROM datosPaciente.Domicilio WHERE calleYNro = 'Chavez 123'
-EXEC datosPaciente.EliminarDomicilio @id = @idDomicilio
-
-SELECT * FROM datosPaciente.Domicilio WHERE id = @idDomicilio
-
 -------------------------------------- TABLA COBERTURA --------------------------------------
 -- Caso de prueba: Insertar una nueva cobertura
 EXEC datosPaciente.InsertarPrestador
-    @nombre = 'Prestador de Cobertura',
+    @nombre = 'Prestador test',
     @tipoPlan = 'Plan de Cobertura'
 
+SELECT * FROM datosPaciente.Prestador
+
 DECLARE @idPrestador INT
-SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador de Cobertura'
+SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador test'
 
 EXEC datosPaciente.InsertarCobertura
     @imagenCredencial = 'Credencial123.jpg',
@@ -123,15 +40,15 @@ EXEC datosPaciente.InsertarCobertura
     @fechaRegistro = '2023-10-16',
     @idPrestador = @idPrestador
 
-SELECT * FROM datosPaciente.Cobertura WHERE nroSocio = 123456
+SELECT * FROM datosPaciente.Cobertura 
 
 -- Caso de prueba: Modificar una cobertura existente
 EXEC datosPaciente.InsertarPrestador
-    @nombre = 'Prestador de Cobertura 2',
-    @tipoPlan = 'Plan de Cobertura 2'
+    @nombre = 'Prestador test 2',
+    @tipoPlan = 'Plan 2'
 
 DECLARE @idPrestador INT
-SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador de Cobertura 2'
+SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador test 2'
 EXEC datosPaciente.InsertarCobertura
     @imagenCredencial = 'Credencial789.jpg',
     @nroSocio = 789012,
@@ -146,63 +63,23 @@ EXEC datosPaciente.ModificarCobertura
     @nuevaImagenCredencial = 'NuevaCredencial.jpg',
     @nuevoNroSocio = 654321
 
-SELECT * FROM datosPaciente.Cobertura WHERE id = @idCobertura
-
--- Caso de prueba: Eliminar coberturas de un prestador
-EXEC datosPaciente.InsertarPrestador
-    @nombre = 'Prestador con Coberturas',
-    @tipoPlan = 'Plan de Pruebas'
-
-
-DECLARE @idPrestador INT
-SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador con Coberturas'
-EXEC datosPaciente.InsertarCobertura
-    @imagenCredencial = 'Credencial1.jpg',
-    @nroSocio = 111,
-    @fechaRegistro = '2023-10-18',
-    @idPrestador = @idPrestador
-
-EXEC datosPaciente.InsertarCobertura
-    @imagenCredencial = 'Credencial2.jpg',
-    @nroSocio = 222,
-    @fechaRegistro = '2023-10-19',
-    @idPrestador = @idPrestador
-
-EXEC datosPaciente.EliminarCobertura @idPrestador
-
-SELECT * FROM datosPaciente.Cobertura WHERE idPrestador = @idPrestador
-
+SELECT * FROM datosPaciente.Cobertura 
 
 -------------------------------------- TABLA PRESTADOR --------------------------------------
--- Caso de prueba: Insertar un nuevo prestador
-EXEC datosPaciente.InsertarPrestador
-    @nombre = 'Prestador 1',
-    @tipoPlan = 'Plan A'
 
-SELECT * FROM datosPaciente.Prestador WHERE nombre = 'Prestador 1'
-
--- Caso de prueba: Modificar un prestador existente
+-- Caso de prueba: Eliminar un prestador existente
 EXEC datosPaciente.InsertarPrestador
-    @nombre = 'Prestador 2',
+    @nombre = 'Prestador E2',
     @tipoPlan = 'Plan B'
 
 DECLARE @idPrestador INT
-SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador 2'
-
-EXEC datosPaciente.ModificarPrestador
-    @id = @idPrestador,
-    @nuevoNombre = 'Nuevo Prestador 2',
-    @nuevoTipoPlan = 'Plan C'
-
-SELECT * FROM datosPaciente.Prestador WHERE id = @idPrestador
-
--- Caso de prueba: Eliminar un prestador existente
-DECLARE @idPrestador INT
-SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador 2'
+SELECT @idPrestador = id FROM datosPaciente.Prestador WHERE nombre = 'Prestador E2'
 EXEC datosPaciente.EliminarPrestador @id = @idPrestador
 
-SELECT * FROM datosPaciente.Prestador WHERE id = @idPrestador
+SELECT * FROM datosPaciente.Prestador 
 
+
+/*
 -------------------------------------- TABLA ESTUDIO --------------------------------------
 -- Llamamos al procedimiento para insertar un estudio de ejemplo
 EXEC datosPaciente.InsertarEstudio
@@ -475,4 +352,4 @@ EXEC datosAtencion.EliminarEspecialidad
     @idEspecialidad = @idEspecialidad
 
 SELECT * FROM datosAtencion.Especialidad WHERE id = @idEspecialidad
-
+*/
