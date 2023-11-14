@@ -467,7 +467,7 @@ BEGIN
 		CAST(Numerodecolegiado as INT)
 	FROM #TempTable T 
 	INNER JOIN datosAtencion.Especialidad E 
-	ON T.Especialidad COLLATE Modern_Spanish_CI_AI = E.nombre COLLATE Modern_Spanish_CI_AI;
+	ON T.Especialidad COLLATE Modern_Spanish_CI_AI = E.nombre COLLATE Modern_Spanish_CI_AI
 	WHERE NOT EXISTS (SELECT 1 FROM datosAtencion.Medico WHERE nroMatricula = CAST(T.Numerodecolegiado AS INT));
 
 	-- Eliminar la tabla temporal después de su uso 
@@ -615,7 +615,7 @@ BEGIN
 		[Porcentaje Cobertura] int '$."Porcentaje Cobertura"',
 		Costo money '$.Costo',
 		[Requiere autorizacion] bit '$."Requiere autorizacion"'
-	);
+	)
 	WHERE NOT EXISTS (
 		SELECT 1 
 		FROM datosAtencion.Centro_Autorizaciones ca
