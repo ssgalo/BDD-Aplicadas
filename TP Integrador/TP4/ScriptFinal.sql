@@ -324,16 +324,12 @@ GO
 
 ---------------------------------------------------------------------------------
 
-
-
---EXEC CargarDatosDesdeCSV_Prestadores -- NO ME FUNCIONA asi que cargo genericos
-
 ----------------------------------------------------------------------------------
 -- Creacion de los SP para cargar los datos desde CSV
 
 -- LUEGO DEJAR DOCUMENTACIÓN DEL BULK INSERT
 
--- Cosas a tener en cuenta: Este SP es para una carga de registros NUEVOS.
+-- Cosas a tener en cuenta: 
 -- No admite la modificación de los ya ingresados.
 -- Contemplamos asignar un usuario genérico al ser la primera vez que ingresa, con una contraseña 12345678
 -- Luego el usuario deberá cambiar su contraseña
@@ -351,19 +347,6 @@ GO
 CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Pacientes
 AS
 BEGIN
-	DECLARE @cantRegistrosDomicilio INT;
-	DECLARE @cantRegistrosPaciente INT;
-	SELECT @cantRegistrosDomicilio = COUNT(*) FROM datosPaciente.Domicilio;
-	SELECT @cantRegistrosPaciente = COUNT(*) FROM datosPaciente.Paciente;
-
-	IF @cantRegistrosDomicilio > 0 OR @cantRegistrosPaciente > 0
-	BEGIN
-		-- PREGUNTAR AL PROFE QUE SE HACE EN ESTE CASO. ESTE SP ES SOLO PARA REGISTROS NUEVOS?
-		-- CONVIENE BORRAR LA TABLA Y VOLVER A INSERTAR?
-		PRINT 'YA EXISTEN REGISTROS EN LAS TABLAS'
-		RETURN;
-	END
-	
 	-- Crear una tabla temporal con la misma estructura que el archivo CSV
 	CREATE TABLE #TempTable
 	(
@@ -390,7 +373,8 @@ BEGIN
 		ROWTERMINATOR = '\n',
 		FIRSTROW = 2
 	);
-	
+
+	 -- Insertar en la tabla datosPaciente.Domicilio solo si no existen registros con el mismo nroDocumento
 	INSERT INTO datosPaciente.Domicilio(calleYNro, piso, departamento, codigoPostal, pais, provincia, localidad, nroDocumento)
 	SELECT
 	CalleyNro,
@@ -402,8 +386,9 @@ BEGIN
 	CAST(T.Localidad AS NVARCHAR(15)),
 	CAST(T.Nrodocumento AS int)
 	FROM #TempTable T
+	WHERE NOT EXISTS (SELECT 1 FROM datosPaciente.Domicilio WHERE nroDocumento = T.Nrodocumento);
 
-	-- Realizar transformación de datos y luego insertar en la tabla de destino
+	-- Realizar transformación de datos y luego insertar en la tabla datosPaciente.Paciente solo si no existen registros con el mismo nroDocumento
 	INSERT INTO datosPaciente.Paciente(nombre, apellido, apellidomaterno, fechaNacimiento, tipoDocumento,
 				nroDocumento, sexo, genero, nacionalidad, fotoPerfil, mail, telefonoFijo, telefonoContactoAlternativo, telefonoLaboral,
 				fechaRegistro, fechaActualizacion, idUsuario, idEstudio, idCobertura, idUsuarioActualizacion)
@@ -429,6 +414,7 @@ BEGIN
 		1,
 		NULL
 	FROM #TempTable T 
+	WHERE NOT EXISTS (SELECT 1 FROM datosPaciente.Paciente WHERE nroDocumento = T.Nrodocumento);
 
 	DROP TABLE #TempTable;
 END
@@ -443,13 +429,10 @@ BEGIN
         PRINT 'Procedure CargarDatosDesdeCSV_Medicos eliminada correctamente.'
 END
 GO
+	    
 CREATE OR ALTER PROCEDURE CargarDatosDesdeCSV_Medicos
 AS
 BEGIN
-	--Borrar datos anteriores CONSULTAR! Lo agrego porque se supone que se manda uno nuevo actualizado cada mes
-	delete from datosAtencion.Medico
-	delete from datosAtencion.Especialidad
-
 	-- Crear una tabla temporal con la misma estructura que el archivo CSV
 	CREATE TABLE #TempTable
 	(
@@ -468,10 +451,12 @@ BEGIN
 		FIRSTROW = 2
 	);
 
+	-- Insertar en la tabla datosAtencion.Especialidad solo si no existen registros con el mismo nombre
 	INSERT INTO datosAtencion.Especialidad (nombre)
 	SELECT 
 	DISTINCT(Especialidad) 
 	FROM #tempTable T
+	WHERE NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE nombre = T.Especialidad);
 
 	-- Realizar transformación de datos y luego insertar en la tabla de destino
 	INSERT INTO datosAtencion.Medico(nombre, apellido, idEspecialidad, nroMatricula)
@@ -480,9 +465,10 @@ BEGIN
 		CAST(T.Apellidos AS VARCHAR(20)),
 		E.id,
 		CAST(Numerodecolegiado as INT)
-	FROM #TempTable T INNER JOIN datosAtencion.Especialidad E 
+	FROM #TempTable T 
+	INNER JOIN datosAtencion.Especialidad E 
 	ON T.Especialidad COLLATE Modern_Spanish_CI_AI = E.nombre COLLATE Modern_Spanish_CI_AI;
-
+	WHERE NOT EXISTS (SELECT 1 FROM datosAtencion.Medico WHERE nroMatricula = CAST(T.Numerodecolegiado AS INT));
 
 	-- Eliminar la tabla temporal después de su uso 
 	DROP TABLE #TempTable;		
@@ -519,15 +505,18 @@ BEGIN
 		FIRSTROW = 2
 		--,ERRORFILE = 'C:\Dataset\ErroresSedes.csv'
 	);
-		-- Realizar transformación de datos y luego insertar en la tabla de destino
+	-- Realizar transformación de datos y luego insertar en la tabla datosAtencion.SedeAtencion solo si no existen registros con el mismo nombre y dirección
 	INSERT INTO datosAtencion.SedeAtencion(nombre, direccion, fechaBorrado)
 	SELECT 
 		CAST(T.nombre AS NVARCHAR(30)),  
 		CAST(T.direccion AS NVARCHAR(30)),
 		NULL
 	FROM #TempTable T 
-
-	--SELECT * FROM #TempTable
+	WHERE NOT EXISTS (
+	        SELECT 1 
+	        FROM datosAtencion.SedeAtencion 
+	        WHERE nombre = T.nombre AND direccion = T.direccion
+   	);
 
 	-- Eliminar la tabla temporal después de su uso 
 	DROP TABLE #TempTable;
@@ -562,14 +551,18 @@ BEGIN
 		FIRSTROW = 2
 	);
 	
-	-- Realizar transformación de datos y luego insertar en la tabla de destino
+	-- Realizar transformación de datos y luego insertar en la tabla datosPaciente.Prestador solo si no existen registros con el mismo nombre y tipoPlan
 	INSERT INTO datosPaciente.Prestador(nombre, tipoPlan, fechaBorrado)
 	SELECT 
 		CAST(T.nombre AS NVARCHAR(30)),  
 		CAST(REPLACE(T.tipoPlan, ';;', '') AS NVARCHAR(30)),
 		NULL
 	FROM #TempTable T 
-
+	WHERE NOT EXISTS (
+	        SELECT 1 
+	        FROM datosPaciente.Prestador 
+	        WHERE nombre = T.nombre AND tipoPlan = REPLACE(T.tipoPlan, ';;', '')
+    	);
 
 	-- Eliminar la tabla temporal después de su uso 
 	DROP TABLE #TempTable;	--	lo comente para poder ver como se guardaban, despues descomentar
@@ -622,6 +615,15 @@ BEGIN
 		[Porcentaje Cobertura] int '$."Porcentaje Cobertura"',
 		Costo money '$.Costo',
 		[Requiere autorizacion] bit '$."Requiere autorizacion"'
+	);
+	WHERE NOT EXISTS (
+		SELECT 1 
+		FROM datosAtencion.Centro_Autorizaciones ca
+		WHERE ca.Area = Area
+		AND ca.Estudio = Estudio
+		AND ca.Prestador = Prestador
+		AND ca.Programa = Programa
+		AND ca.[Porcentaje Cobertura] = [Porcentaje Cobertura]
 	);
 END
 GO
