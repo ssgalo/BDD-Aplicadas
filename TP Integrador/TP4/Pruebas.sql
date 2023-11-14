@@ -1,8 +1,8 @@
--- Este SCRIPT no está pensado para ejecutarse todo "de una". Está pensado para ir ejecutando de a secciones con el fin de probar los objetos ya creados
-USE ClinicaCureSA_TP4
+-- Este SCRIPT no estÃ¡ pensado para ejecutarse todo "de una". EstÃ¡ pensado para ir ejecutando de a secciones con el fin de probar los objetos ya creados
+USE CURESA
 
--- CREACIÓN DE GENÉRICOS PARA ASIGNAR LAS FK CUANDO NO HAY NADA
-INSERT INTO datosPaciente.Usuario (contraseña, fechaCreacion, fechaBorrado)
+-- CREACIÃ“N DE GENÃ‰RICOS PARA ASIGNAR LAS FK CUANDO NO HAY NADA
+INSERT INTO datosPaciente.Usuario (contraseÃ±a, fechaCreacion, fechaBorrado)
 VALUES
 ('12345678', GETDATE(), NULL)
 
@@ -36,7 +36,7 @@ EXEC CargarDatosDesdeCSV_Sedes
 SELECT * FROM datosPaciente.Prestador
 EXEC CargarDatosDesdeCSV_Prestadores
 
--- Inserción de ejemplo para luego obtener el XML
+-- InserciÃ³n de ejemplo para luego obtener el XML
 INSERT INTO datosReserva.EstadoTurno (nombreEstado, fechaBorrado) -- tal cual indica el der
 VALUES
     ('Atendido', NULL),
