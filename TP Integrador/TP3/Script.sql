@@ -238,7 +238,9 @@ CREATE TABLE datosReserva.EstadoTurno
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	nombreEstado CHAR(9) NOT NULL,
-	fechaBorrado DATETIME NULL
+	fechaBorrado DATETIME NULL,
+    	CONSTRAINT CK_EstadoTurno_nombreEstado 
+        	CHECK (nombreEstado IN ('Atendido', 'Ausente', 'Cancelado'))
 )
 GO
 
@@ -256,7 +258,9 @@ CREATE TABLE datosReserva.TipoTurno
 (
 	id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	nombre VARCHAR(10) NOT NULL,
-	fechaBorrado DATETIME NULL
+	fechaBorrado DATETIME NULL,
+	CONSTRAINT CK_TipoTurno_nombre 
+        CHECK (nombre IN ('Virtual', 'Presencial'))
 )
 GO
 
