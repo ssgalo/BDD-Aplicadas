@@ -48,14 +48,14 @@ El usuario web se define utilizando el DNI
 */
 ---- FIN DATOS ENTREGA ----
 
--- drop database ClinicaCureSA_TP3
+-- drop database CURESA
 
 
 ---- COMIENZO CREACION DE BASE DE DATOS Y ESQUEMAS ----
-CREATE DATABASE ClinicaCureSA_TP3
+CREATE DATABASE CURESA COLLATE Modern_Spanish_CI_AI;
 GO
 
-USE ClinicaCureSA_TP3
+USE CURESA
 GO
 
 CREATE SCHEMA datosPaciente
@@ -72,7 +72,7 @@ IF OBJECT_ID('datosPaciente.Usuario') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Usuario
     IF OBJECT_ID('datosPaciente.Usuario') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Usuario.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Usuario.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Usuario eliminada correctamente.'
 END
@@ -90,7 +90,7 @@ IF OBJECT_ID('datosPaciente.Domicilio') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Domicilio
     IF OBJECT_ID('datosPaciente.Domicilio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Domicilio.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Domicilio.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Domicilio eliminada correctamente.'
 END
@@ -113,7 +113,7 @@ IF OBJECT_ID('datosPaciente.Prestador') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Prestador
     IF OBJECT_ID('datosPaciente.Prestador') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Prestador.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Prestador.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Prestador eliminada correctamente.'
 END
@@ -131,7 +131,7 @@ IF OBJECT_ID('datosPaciente.Cobertura') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Cobertura
     IF OBJECT_ID('datosPaciente.Cobertura') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Cobertura.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Cobertura.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Cobertura eliminada correctamente.'
 END
@@ -152,7 +152,7 @@ IF OBJECT_ID('datosPaciente.Estudio') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Estudio
     IF OBJECT_ID('datosPaciente.Estudio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Estudio.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Estudio.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Estudio eliminada correctamente.'
 END
@@ -173,7 +173,7 @@ IF OBJECT_ID('datosPaciente.Paciente') IS NOT NULL
 BEGIN
     DROP TABLE datosPaciente.Paciente
     IF OBJECT_ID('datosPaciente.Paciente') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosPaciente.Paciente.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Paciente.', 16, 1);
     ELSE
         PRINT 'Tabla datosPaciente.Paciente eliminada correctamente.'
 END
@@ -213,7 +213,7 @@ IF OBJECT_ID('datosAtencion.Especialidad') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.Especialidad
     IF OBJECT_ID('datosAtencion.Especialidad') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Especialidad.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.Especialidad.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.Especialidad eliminada correctamente.'
 END
@@ -229,7 +229,7 @@ IF OBJECT_ID('datosReserva.EstadoTurno') IS NOT NULL
 BEGIN
     DROP TABLE datosReserva.EstadoTurno
     IF OBJECT_ID('datosReserva.EstadoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.EstadoTurno.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosReserva.EstadoTurno.', 16, 1);
     ELSE
         PRINT 'Tabla datosReserva.EstadoTurno eliminada correctamente.'
 END
@@ -246,6 +246,7 @@ IF OBJECT_ID('datosReserva.TipoTurno') IS NOT NULL
 BEGIN
     DROP TABLE datosReserva.TipoTurno
     IF OBJECT_ID('datosReserva.TipoTurno') IS NOT NULL
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosPaciente.Prestador.', 16, 1);
         PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.TipoTurno.'
     ELSE
         PRINT 'Tabla datosReserva.TipoTurno eliminada correctamente.'
@@ -263,7 +264,7 @@ IF OBJECT_ID('datosAtencion.SedeAtencion') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.SedeAtencion
     IF OBJECT_ID('datosAtencion.SedeAtencion') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.SedeAtencion.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.SedeAtencion.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.SedeAtencion eliminada correctamente.'
 END
@@ -281,7 +282,7 @@ IF OBJECT_ID('datosAtencion.Medico') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.Medico
     IF OBJECT_ID('datosAtencion.Medico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.Medico.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.Medico.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.Medico eliminada correctamente.'
 END
@@ -302,7 +303,7 @@ IF OBJECT_ID('datosAtencion.DiasXSede') IS NOT NULL
 BEGIN
     DROP TABLE datosAtencion.DiasXSede
     IF OBJECT_ID('datosAtencion.DiasXSede') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosAtencion.DiasXSede.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosAtencion.DiasXSede.', 16, 1);
     ELSE
         PRINT 'Tabla datosAtencion.DiasXSede eliminada correctamente.'
 END
@@ -324,7 +325,7 @@ IF OBJECT_ID('datosReserva.Reserva') IS NOT NULL
 BEGIN
     DROP TABLE datosReserva.Reserva
     IF OBJECT_ID('datosReserva.Reserva') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar la tabla datosReserva.Reserva.'
+		RAISERROR('Ocurrió un error al intentar eliminar la tabla datosReserva.Reserva.', 16, 1);
     ELSE
         PRINT 'Tabla datosReserva.Reserva eliminada correctamente.'
 END
@@ -354,7 +355,7 @@ IF OBJECT_ID('datosPaciente.InsertarUsuario') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.InsertarUsuario
     IF OBJECT_ID('datosPaciente.InsertarUsuario') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarUsuario.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarUsuario.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.InsertarUsuario eliminado correctamente.'
 END
@@ -381,7 +382,7 @@ BEGIN
 	IF(@@ERROR = 0)
 		PRINT 'Usuario insertado correctamente';
 	ELSE
-		PRINT 'Ocurrió un error al insertar un registro en Usuario'
+		RAISERROR('Ocurrió un error al insertar un registro en Usuario.', 16, 1);
 END
 GO
 
@@ -389,7 +390,7 @@ IF OBJECT_ID('datosPaciente.ModificarUsuario') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.ModificarUsuario
     IF OBJECT_ID('datosPaciente.ModificarUsuario') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarUsuario.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarUsuario.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.ModificarUsuario eliminado correctamente.'
 END
@@ -422,7 +423,7 @@ IF OBJECT_ID('datosPaciente.EliminarUsuario') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.EliminarUsuario
     IF OBJECT_ID('datosPaciente.EliminarUsuario') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarUsuario.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarUsuario.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.EliminarUsuario eliminado correctamente.'
 END
@@ -456,7 +457,7 @@ IF OBJECT_ID('datosPaciente.InsertarDomicilio') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.InsertarDomicilio
     IF OBJECT_ID('datosPaciente.InsertarDomicilio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarDomicilio.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarDomicilio.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.InsertarDomicilio eliminado correctamente.'
 END
@@ -489,7 +490,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Domicilio insertado correctamente';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar el registro en Domicilio'
+		RAISERROR('Ocurrió un error al intentar insertar el registro en Domicilio.', 16, 1);
 END
 GO
 
@@ -497,7 +498,7 @@ IF OBJECT_ID('datosPaciente.ModificarDomi') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.ModificarDomi
     IF OBJECT_ID('datosPaciente.ModificarDomi') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarDomi.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarDomi.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.ModificarDomi eliminado correctamente.'
 END
@@ -541,7 +542,7 @@ IF OBJECT_ID('datosPaciente.EliminarDomicilio') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.EliminarDomicilio
     IF OBJECT_ID('datosPaciente.EliminarDomicilio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarDomicilio.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarDomicilio.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.EliminarDomicilio eliminado correctamente.'
 END
@@ -571,7 +572,7 @@ IF OBJECT_ID('datosPaciente.InsertarPrestador') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.InsertarPrestador
     IF OBJECT_ID('datosPaciente.InsertarPrestador') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarPrestador.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarPrestador.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.InsertarPrestador eliminado correctamente.'
 END
@@ -596,7 +597,7 @@ BEGIN
 	IF(@@ERROR = 0)
 		PRINT 'Prestador cargado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar Prestador';
+		RAISERROR('Ocurrió un error al intentar insertar Prestador.', 16, 1);
 END;
 GO
 
@@ -604,7 +605,7 @@ IF OBJECT_ID('datosPaciente.ModificarPrestador') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.ModificarPrestador
     IF OBJECT_ID('datosPaciente.ModificarPrestador') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarPrestador.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarPrestador.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.ModificarPrestador eliminado correctamente.'
 END
@@ -640,7 +641,7 @@ IF OBJECT_ID('datosPaciente.EliminarPrestador') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.EliminarPrestador
     IF OBJECT_ID('datosPaciente.EliminarPrestador') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarPrestador.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarPrestador.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.EliminarPrestador eliminado correctamente.'
 END
@@ -674,7 +675,7 @@ IF OBJECT_ID('datosPaciente.InsertarCobertura') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.InsertarCobertura
     IF OBJECT_ID('datosPaciente.InsertarCobertura') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarCobertura.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarCobertura.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.InsertarCobertura eliminado correctamente.'
 END
@@ -700,7 +701,7 @@ BEGIN
 	IF(@@ERROR = 0)
 		PRINT 'Registro de Cobertura insertado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar un registro en Cobertura';
+		RAISERROR('Ocurrió un error al intentar insertar un registro en Cobertura', 16, 1);
 END
 GO
 
@@ -708,7 +709,7 @@ IF OBJECT_ID('datosPaciente.ModificarCobertura') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.ModificarCobertura
     IF OBJECT_ID('datosPaciente.ModificarCobertura') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarCobertura.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarCobertura.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.ModificarCobertura eliminado correctamente.'
 END
@@ -755,7 +756,7 @@ IF OBJECT_ID('datosPaciente.EliminarCobertura') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.EliminarCobertura
     IF OBJECT_ID('datosPaciente.EliminarCobertura') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarCobertura.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarCobertura.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.EliminarCobertura eliminado correctamente.'
 END
@@ -787,7 +788,7 @@ IF OBJECT_ID('datosAtencion.InsertarEspecialidad') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.InsertarEspecialidad
     IF OBJECT_ID('datosAtencion.InsertarEspecialidad') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarEspecialidad.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarEspecialidad.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.InsertarEspecialidad eliminado correctamente.'
 END
@@ -814,7 +815,7 @@ BEGIN
 	IF(@@ERROR = 0)
 		PRINT 'Especialidad ingresada correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar un registro en Especialidad'
+		RAISERROR('Ocurrió un error al intentar insertar un registro en Especialidad', 16, 1);
 END
 GO
 
@@ -822,7 +823,7 @@ IF OBJECT_ID('datosAtencion.ModificarEspecialidad') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.ModificarEspecialidad
     IF OBJECT_ID('datosAtencion.ModificarEspecialidad') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.ModificarEspecialidad.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.ModificarEspecialidad.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.ModificarEspecialidad eliminado correctamente.'
 END
@@ -836,19 +837,19 @@ AS
 BEGIN
     IF (NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE ID = @idEspecialidad))
     BEGIN
-        PRINT 'La especialidad especificada no existe.';
+		RAISERROR('La especialidad especificada no existe.', 16, 1);
         RETURN; 
     END
 
     IF (LEN(@NuevoNombre) = 0)
     BEGIN
-        PRINT 'El nuevo nombre no puede estar vacío.';
+		RAISERROR('El nuevo nombre no puede estar vacío.', 16, 1);
         RETURN; 
     END
 
     IF (EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE Nombre = @NuevoNombre AND ID != @idEspecialidad))
     BEGIN
-        PRINT 'Ya existe la especialidad por la que queres modificar.';
+		RAISERROR('Ya existe la especialidad por la que queres modificar.', 16, 1);
         RETURN;
     END
 
@@ -867,7 +868,7 @@ IF OBJECT_ID('datosAtencion.EliminarEspecialidad') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.EliminarEspecialidad
     IF OBJECT_ID('datosAtencion.EliminarEspecialidad') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.EliminarEspecialidad.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.EliminarEspecialidad.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.EliminarEspecialidad eliminado correctamente.'
 END
@@ -878,7 +879,7 @@ AS
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM datosAtencion.Especialidad WHERE ID = @idEspecialidad)
     BEGIN
-        PRINT 'La EspecialidadID especificada no existe.';
+		RAISERROR('La EspecialidadID especificada no existe.', 16, 1);
         RETURN;
     END
 
@@ -897,7 +898,7 @@ IF OBJECT_ID('datosAtencion.InsertarSede') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.InsertarSede
     IF OBJECT_ID('datosAtencion.InsertarSede') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarSede.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarSede.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.InsertarSede eliminado correctamente.'
 END
@@ -927,7 +928,7 @@ BEGIN
 	IF(@@ERROR = 0)
 		PRINT 'Sede insertada correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar Sede'
+		RAISERROR('Ocurrió un error al intentar insertar Sede.', 16, 1);
 END
 GO
 
@@ -935,7 +936,7 @@ IF OBJECT_ID('datosAtencion.ModificarSede') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.ModificarSede
     IF OBJECT_ID('datosAtencion.ModificarSede') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.ModificarSede.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.ModificarSede.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.ModificarSede eliminado correctamente.'
 END
@@ -982,7 +983,7 @@ IF OBJECT_ID('datosAtencion.EliminarSede') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.EliminarSede
     IF OBJECT_ID('datosAtencion.EliminarSede') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.EliminarSede.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.EliminarSede..', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.EliminarSede eliminado correctamente.'
 END
@@ -993,7 +994,7 @@ AS
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM datosAtencion.SedeAtencion WHERE id = @SedeID)
     BEGIN
-		PRINT 'La SedeID especificada no existe.'
+		RAISERROR('La SedeID especificada no existe.', 16, 1);
         RETURN;
     END
 
@@ -1014,7 +1015,7 @@ IF OBJECT_ID('datosAtencion.InsertarHorarioMedico') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.InsertarHorarioMedico
     IF OBJECT_ID('datosAtencion.InsertarHorarioMedico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarHorarioMedico.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarHorarioMedico.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.InsertarHorarioMedico eliminado correctamente.'
 END
@@ -1061,7 +1062,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Registro de horario de médico insertado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar registro en DiaXSede.'
+		RAISERROR('Ocurrió un error al intentar insertar registro en DiaXSede.', 16, 1);
 END
 GO
 
@@ -1069,7 +1070,7 @@ IF OBJECT_ID('datosAtencion.ModificarHorarioMedico') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.ModificarHorarioMedico
     IF OBJECT_ID('datosAtencion.ModificarHorarioMedico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.ModificarHorarioMedico.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.ModificarHorarioMedico.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.ModificarHorarioMedico eliminado correctamente.'
 END
@@ -1112,7 +1113,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Registro de horario de médico modificado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar modificar el registro de horario médico.';
+		RAISERROR('Ocurrió un error al intentar modificar el registro de horario médico..', 16, 1);
 END
 GO
 
@@ -1120,7 +1121,7 @@ IF OBJECT_ID('datosAtencion.EliminarHorarioMedico') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.EliminarHorarioMedico
     IF OBJECT_ID('datosAtencion.EliminarHorarioMedico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.EliminarHorarioMedico.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.EliminarHorarioMedico.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.EliminarHorarioMedico eliminado correctamente.'
 END
@@ -1153,7 +1154,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Registro de horario de médico eliminado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar registro de horario de médico.'
+		RAISERROR('Ocurrió un error al intentar insertar registro de horario de médico.', 16, 1);
 END
 GO
 ---- FIN DE STORED PROCEDURES DE DIAXSEDE ----
@@ -1163,7 +1164,7 @@ IF OBJECT_ID('datosReserva.InsertarTipoTurno') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.InsertarTipoTurno
     IF OBJECT_ID('datosReserva.InsertarTipoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.InsertarTipoTurno.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.InsertarTipoTurno.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.InsertarTipoTurno eliminado correctamente.'
 END
@@ -1185,7 +1186,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Tipo de turno insertado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar registro de Tipo de Turno'
+		RAISERROR('Ocurrió un error al intentar insertar registro de Tipo de Turno', 16, 1);
 END
 GO
 
@@ -1193,7 +1194,7 @@ IF OBJECT_ID('datosReserva.ModificarTipoTurno') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.ModificarTipoTurno
     IF OBJECT_ID('datosReserva.ModificarTipoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.ModificarTipoTurno.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.ModificarTipoTurno.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.ModificarTipoTurno eliminado correctamente.'
 END
@@ -1225,7 +1226,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Nombre del Tipo de Turno modificado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar modificar un registro de Tipo de Turno'
+		RAISERROR('Ocurrió un error al intentar modificar un registro de Tipo de Turno.', 16, 1);
 END
 GO
 
@@ -1233,7 +1234,7 @@ IF OBJECT_ID('datosReserva.EliminarTipoTurno') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.EliminarTipoTurno
     IF OBJECT_ID('datosReserva.EliminarTipoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.EliminarTipoTurno.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.EliminarTipoTurno.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.EliminarTipoTurno eliminado correctamente.'
 END
@@ -1255,7 +1256,7 @@ BEGIN
 	IF(@@ERROR = 0)
 		PRINT 'Tipo de turno eliminado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar eliminar el registro de Tipo de Turno'
+		RAISERROR('Ocurrió un error al intentar eliminar el registro de Tipo de Turno.', 16, 1);
 END
 GO
 
@@ -1263,7 +1264,7 @@ IF OBJECT_ID('datosReserva.InsertarEstadoTurno') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.InsertarEstadoTurno
     IF OBJECT_ID('datosReserva.InsertarEstadoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.InsertarEstadoTurno.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.InsertarEstadoTurno.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.InsertarEstadoTurno eliminado correctamente.'
 END
@@ -1291,7 +1292,7 @@ IF OBJECT_ID('datosReserva.ModificarEstadoTurno') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.ModificarEstadoTurno
     IF OBJECT_ID('datosReserva.ModificarEstadoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.ModificarEstadoTurno.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.ModificarEstadoTurno..', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.ModificarEstadoTurno eliminado correctamente.'
 END
@@ -1328,7 +1329,7 @@ IF OBJECT_ID('datosReserva.EliminarEstadoTurno') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.EliminarEstadoTurno
     IF OBJECT_ID('datosReserva.EliminarEstadoTurno') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.EliminarEstadoTurno.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.EliminarEstadoTurno.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.EliminarEstadoTurno eliminado correctamente.'
 END
@@ -1359,7 +1360,7 @@ IF OBJECT_ID('datosPaciente.InserPaciente') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.InserPaciente
     IF OBJECT_ID('datosPaciente.InserPaciente') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.InserPaciente.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.InserPaciente.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.InserPaciente eliminado correctamente.'
 END
@@ -1433,7 +1434,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Registro de Paciente insertado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar registro en Paciente'
+		RAISERROR('Ocurrió un error al intentar insertar registro en Paciente', 16, 1);
 END
 GO
 
@@ -1441,7 +1442,7 @@ IF OBJECT_ID('datosPaciente.ModifPaciente') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.ModifPaciente
     IF OBJECT_ID('datosPaciente.ModifPaciente') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.ModifPaciente.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.ModifPaciente.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.ModifPaciente eliminado correctamente.'
 END
@@ -1512,7 +1513,7 @@ IF OBJECT_ID('datosPaciente.ElimPaciente') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.ElimPaciente
     IF OBJECT_ID('datosPaciente.ElimPaciente') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.ElimPaciente.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.ElimPaciente.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.ElimPaciente eliminado correctamente.'
 END
@@ -1544,7 +1545,7 @@ IF OBJECT_ID('datosAtencion.InsertarMedico') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.InsertarMedico
     IF OBJECT_ID('datosAtencion.InsertarMedico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarMedico.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.InsertarMedico.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.InsertarMedico eliminado correctamente.'
 END
@@ -1574,7 +1575,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Registro de Medico insertado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar un registro en Medico.'
+		RAISERROR('Ocurrió un error al intentar insertar un registro en Medico.', 16, 1);
 END;
 GO
 
@@ -1582,7 +1583,7 @@ IF OBJECT_ID('datosAtencion.ModifMedico') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.ModifMedico
     IF OBJECT_ID('datosAtencion.ModifMedico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.ModifMedico.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosAtencion.ModifMedico.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.ModifMedico eliminado correctamente.'
 END
@@ -1621,7 +1622,7 @@ IF OBJECT_ID('datosAtencion.EliminarMedico') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosAtencion.EliminarMedico
     IF OBJECT_ID('datosAtencion.EliminarMedico') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosAtencion.EliminarMedico.'
+		RAISERROR('OOcurrió un error al intentar eliminar el procedure datosAtencion.EliminarMedico.', 16, 1);
     ELSE
         PRINT 'Procedure datosAtencion.EliminarMedico eliminado correctamente.'
 END
@@ -1653,7 +1654,7 @@ IF OBJECT_ID('datosReserva.InsertarReserva') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.InsertarReserva
     IF OBJECT_ID('datosReserva.InsertarReserva') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.InsertarReserva.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.InsertarReserva.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.InsertarReserva eliminado correctamente.'
 END
@@ -1697,7 +1698,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Registro de Reserva insertado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar un registro en Reserva.'
+		RAISERROR('Ocurrió un error al intentar insertar un registro en Reserva.', 16, 1);
 END;
 GO
 
@@ -1705,7 +1706,7 @@ IF OBJECT_ID('datosReserva.ModificarReserva') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.ModificarReserva
     IF OBJECT_ID('datosReserva.ModificarReserva') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.ModificarReserva.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.ModificarReserva.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.ModificarReserva eliminado correctamente.'
 END
@@ -1752,7 +1753,7 @@ IF OBJECT_ID('datosReserva.EliminarReserva') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosReserva.EliminarReserva
     IF OBJECT_ID('datosReserva.EliminarReserva') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosReserva.EliminarReserva.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosReserva.EliminarReserva.', 16, 1);
     ELSE
         PRINT 'Procedure datosReserva.EliminarReserva eliminado correctamente.'
 END
@@ -1783,7 +1784,7 @@ IF OBJECT_ID('datosPaciente.InsertarEstudio') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.InsertarEstudio
     IF OBJECT_ID('datosPaciente.InsertarEstudio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarEstudio.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.InsertarEstudio.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.InsertarEstudio eliminado correctamente.'
 END
@@ -1820,7 +1821,7 @@ BEGIN
 	IF (@@ERROR = 0)
 		PRINT 'Registro de Estudio insertado correctamente.';
 	ELSE
-		PRINT 'Ocurrió un error al intentar insertar registro en Estudio.'
+		RAISERROR('Ocurrió un error al intentar insertar registro en Estudio.', 16, 1);
 END;
 GO
 
@@ -1828,7 +1829,7 @@ IF OBJECT_ID('datosPaciente.ModificarEstudio') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.ModificarEstudio
     IF OBJECT_ID('datosPaciente.ModificarEstudio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarEstudio.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.ModificarEstudio.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.ModificarEstudio eliminado correctamente.'
 END
@@ -1869,7 +1870,7 @@ IF OBJECT_ID('datosPaciente.EliminarEstudio') IS NOT NULL
 BEGIN
     DROP PROCEDURE datosPaciente.EliminarEstudio
     IF OBJECT_ID('datosPaciente.EliminarEstudio') IS NOT NULL
-        PRINT 'Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarEstudio.'
+		RAISERROR('Ocurrió un error al intentar eliminar el procedure datosPaciente.EliminarEstudio.', 16, 1);
     ELSE
         PRINT 'Procedure datosPaciente.EliminarEstudio eliminado correctamente.'
 END
